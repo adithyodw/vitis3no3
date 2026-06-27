@@ -1,8 +1,10 @@
 "use client";
 
+import { HouseManualSection } from "@/components/guide/house-manual-section";
+import { HouseRulesSection } from "@/components/guide/house-rules-section";
+import { CheckoutFarewell } from "@/components/home/home-sections";
 import { Card, SectionLabel, SectionTitle } from "@/components/ui/primitives";
 import { Reveal, useCopyFeedback } from "@/components/ui/reveal";
-import { CheckoutFarewell } from "@/components/home/home-sections";
 import { propertyConfig } from "@/config/property";
 import type { Booking } from "@/types";
 import { buildWifiQrPayload, copyToClipboard } from "@/lib/utils";
@@ -19,6 +21,7 @@ export function GuideSection({ booking }: GuideSectionProps) {
 
   const ssid = booking.wifiSsid ?? "";
   const password = booking.wifiPassword ?? "";
+  const wifiFull = `Network: ${ssid}\nPassword: ${password}`;
 
   useEffect(() => {
     if (!ssid || !password) return;
@@ -48,7 +51,7 @@ export function GuideSection({ booking }: GuideSectionProps) {
             <div className="text-[15px] font-semibold">Wi-Fi</div>
           </div>
           <CopyRow
-            label="Network"
+            label="Network Name"
             value={ssid}
             copied={copiedKey === "name"}
             onCopy={() => handleCopy(ssid, "name")}
@@ -60,6 +63,13 @@ export function GuideSection({ booking }: GuideSectionProps) {
             onCopy={() => handleCopy(password, "pass")}
             className="mt-2"
           />
+          <button
+            type="button"
+            onClick={() => handleCopy(wifiFull, "all")}
+            className="mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-[13px] border border-accent bg-accent-soft py-3 text-sm font-semibold text-accent active:scale-[0.99]"
+          >
+            {copiedKey === "all" ? "Copied Wi-Fi details" : "Copy network & password"}
+          </button>
           <div className="mt-3.5 flex items-center gap-3.5 border-t border-line-2 pt-3.5">
             {qrDataUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -80,53 +90,12 @@ export function GuideSection({ booking }: GuideSectionProps) {
         </Card>
       </Reveal>
 
-      <Reveal>
-        <Card className="mb-3.5 p-5">
-          <div className="mb-3.5 text-xs font-semibold tracking-[0.14em] uppercase text-text-3">
-            House rules
-          </div>
-          <div className="flex flex-col gap-[11px]">
-            {propertyConfig.houseRules.map((rule) => (
-              <div key={rule} className="flex items-start gap-[11px]">
-                <CheckCircle className="mt-px shrink-0 text-accent" />
-                <span className="text-sm leading-snug font-medium">{rule}</span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 flex items-center gap-2.5 rounded-[13px] border border-danger/20 bg-danger/8 p-[13px_15px]">
-            <WarningIcon />
-            <span className="text-[13.5px] font-medium">
-              Smoking penalty — <strong>USD {propertyConfig.smokingPenaltyUsd}</strong>. This is an Airbnb home, not a hotel.
-            </span>
-          </div>
-        </Card>
+      <Reveal className="mb-3.5">
+        <HouseRulesSection />
       </Reveal>
 
-      <Reveal>
-        <Card className="mb-3.5 p-5">
-          <div className="mb-3.5 flex items-center gap-2.5">
-            <CameraIcon />
-            <div className="text-[15px] font-semibold">Privacy & cameras</div>
-          </div>
-          {propertyConfig.cctv.map((camera, i) => (
-            <div
-              key={camera.name}
-              className={`flex items-start gap-[11px] py-3 ${i === 0 ? "border-b border-line-2" : "pt-3"}`}
-            >
-              <span
-                className={`mt-0.5 h-2 w-2 shrink-0 rounded-full ${
-                  camera.status === "guest-controllable" ? "bg-[#6FD08A]" : "bg-accent"
-                }`}
-              />
-              <div>
-                <div className="text-sm font-semibold">{camera.name}</div>
-                <div className="mt-0.5 text-[12.5px] leading-relaxed font-medium text-text-2">
-                  {camera.description}
-                </div>
-              </div>
-            </div>
-          ))}
-        </Card>
+      <Reveal className="mb-3.5">
+        <HouseManualSection />
       </Reveal>
 
       <Reveal>
@@ -150,17 +119,7 @@ export function GuideSection({ booking }: GuideSectionProps) {
       <Reveal>
         <Card className="mb-3.5 p-5">
           <div className="mb-3.5 text-xs font-semibold tracking-[0.14em] uppercase text-text-3">
-            Facilities · walking distance
-          </div>
-          <div className="mb-3.5 grid grid-cols-3 gap-2">
-            {propertyConfig.facilities.items.map((item) => (
-              <div
-                key={item}
-                className="flex aspect-square items-center justify-center rounded-[14px] bg-bg-2 p-2 text-center text-[11px] font-semibold text-text-2"
-              >
-                {item}
-              </div>
-            ))}
+            Clubhouse facilities
           </div>
           <div className="flex flex-wrap gap-2">
             {propertyConfig.facilities.items.map((item) => (
@@ -199,12 +158,14 @@ export function GuideSection({ booking }: GuideSectionProps) {
       <Reveal>
         <Card className="mb-3.5 p-5">
           <div className="mb-3.5 text-xs font-semibold tracking-[0.14em] uppercase text-text-3">
-            Bathrooms & supplies
+            Bathrooms & guest supplies
           </div>
           <p className="mb-0 text-[13.5px] leading-relaxed font-medium text-text-2">
-            <strong className="text-text">Master bathroom</strong> — {propertyConfig.bathrooms.master}
+            <strong className="text-text">Master bathroom</strong> —{" "}
+            {propertyConfig.bathrooms.master}
             <br />
-            <strong className="text-text">Common bathroom</strong> — {propertyConfig.bathrooms.common}
+            <strong className="text-text">Common bathroom</strong> —{" "}
+            {propertyConfig.bathrooms.common}
           </p>
           <div className="mt-3.5 flex gap-2">
             {[
@@ -225,7 +186,7 @@ export function GuideSection({ booking }: GuideSectionProps) {
         <Card gradient className="p-5">
           <div className="mb-4 flex items-center gap-2.5">
             <CheckoutIcon />
-            <div className="text-[15px] font-semibold">Before you check out</div>
+            <div className="text-[15px] font-semibold">Checkout instructions</div>
           </div>
           <div>
             {propertyConfig.checkout.map((step, i) => (
@@ -242,6 +203,9 @@ export function GuideSection({ booking }: GuideSectionProps) {
               </div>
             ))}
           </div>
+          <p className="mt-3 text-[13px] leading-relaxed font-medium text-text-2">
+            {propertyConfig.checkOutNote}
+          </p>
           <CheckoutFarewell guestName={booking.guestName} />
         </Card>
       </Reveal>
@@ -273,15 +237,7 @@ function CopyRow({
         <div className="mt-0.5 text-[15px] font-semibold tracking-wide">{value}</div>
       </div>
       <span className="flex items-center gap-1.5 text-xs font-semibold text-accent">
-        {copied ? (
-          <>
-            <CheckIcon /> Copied
-          </>
-        ) : (
-          <>
-            <CopyIcon /> Copy
-          </>
-        )}
+        {copied ? "Copied" : "Copy"}
       </span>
     </button>
   );
@@ -292,33 +248,6 @@ function WifiIcon() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M2 8.8a15 15 0 0 1 20 0M5 12a10.5 10.5 0 0 1 14 0M8 15.2a6 6 0 0 1 8 0" />
       <circle cx="12" cy="19" r="1.1" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function CheckCircle({ className }: { className?: string }) {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M8.5 12.2l2.4 2.4 4.6-4.8" />
-    </svg>
-  );
-}
-
-function WarningIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
-    </svg>
-  );
-}
-
-function CameraIcon() {
-  return (
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M3 8.5 16 5l1 3.6L4 12Z" />
-      <path d="m15.5 7 3.8-1.3a1 1 0 0 1 1.3.7l.6 2.2a1 1 0 0 1-.7 1.2L17 11" />
-      <path d="M5 12v4a2 2 0 0 0 2 2h1M8 21v-3" />
     </svg>
   );
 }
@@ -337,23 +266,6 @@ function CheckoutIcon() {
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
       <path d="M16 17l5-5-5-5M21 12H9" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M4 12.5l5 5 11-11" />
-    </svg>
-  );
-}
-
-function CopyIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="9" y="9" width="11" height="11" rx="2.5" />
-      <path d="M5 15V5a2 2 0 0 1 2-2h8" />
     </svg>
   );
 }

@@ -23,12 +23,18 @@ export function FloatingSupport({ onNavigate }: FloatingSupportProps) {
             transition={{ duration: 0.22 }}
             className="pointer-events-auto flex flex-col gap-2 rounded-[18px] border border-line bg-card p-2 shadow-premium-lg"
           >
-            <MenuAction label="Chat host" onClick={() => { setOpen(false); onNavigate("help"); }} />
             <MenuAction
-              label="WhatsApp"
+              label="Airbnb message"
               onClick={() => {
                 setOpen(false);
-                window.open(`https://wa.me/${siteConfig.host.whatsapp}`, "_blank", "noopener,noreferrer");
+                window.open(siteConfig.host.airbnbMessageUrl, "_blank", "noopener,noreferrer");
+              }}
+            />
+            <MenuAction
+              label="Help & FAQ"
+              onClick={() => {
+                setOpen(false);
+                onNavigate("help");
               }}
             />
             <MenuAction
@@ -37,13 +43,6 @@ export function FloatingSupport({ onNavigate }: FloatingSupportProps) {
               onClick={() => {
                 setOpen(false);
                 window.open(`tel:${siteConfig.emergencyPhone}`, "_self");
-              }}
-            />
-            <MenuAction
-              label="Security"
-              onClick={() => {
-                setOpen(false);
-                window.open(`tel:${siteConfig.securityPhone}`, "_self");
               }}
             />
           </motion.div>

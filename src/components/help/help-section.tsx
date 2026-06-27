@@ -18,39 +18,24 @@ export function HelpSection() {
       </SectionTitle>
 
       <Reveal>
-        <div className="mb-3.5 flex flex-col gap-2.5">
-          <SupportButton
-            title="Message host on Airbnb"
-            subtitle={`${siteConfig.host.name} · usually replies within an hour`}
-            onClick={() =>
-              window.open(siteConfig.host.airbnbMessageUrl, "_blank", "noopener,noreferrer")
-            }
-            icon={<MessageIcon />}
-            iconClassName="bg-accent-soft text-accent"
-          />
-          <SupportButton
-            title="WhatsApp the host"
-            subtitle="For quick questions during your stay"
-            onClick={() =>
-              window.open(
-                `https://wa.me/${siteConfig.host.whatsapp}`,
-                "_blank",
-                "noopener,noreferrer",
-              )
-            }
-            icon={<WhatsAppIcon />}
-            iconClassName="bg-[rgba(37,211,102,0.12)] text-[#1FA855]"
-          />
-          <SupportButton
-            title="Call estate security"
-            subtitle="Orchard Park guard post · 24 hours"
-            onClick={() =>
-              window.open(`tel:${siteConfig.securityPhone}`, "_self")
-            }
-            icon={<PhoneIcon />}
-            iconClassName="bg-accent-soft text-accent"
-          />
-        </div>
+        <button
+          type="button"
+          onClick={() =>
+            window.open(siteConfig.host.airbnbMessageUrl, "_blank", "noopener,noreferrer")
+          }
+          className="mb-3.5 flex w-full cursor-pointer items-center gap-3.5 rounded-[18px] border border-line bg-card p-4 text-left shadow-premium active:scale-[0.985] hover:border-accent-2"
+        >
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[13px] bg-accent-soft text-accent">
+            <MessageIcon />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-[15px] font-semibold">Message host on Airbnb</div>
+            <div className="text-[12.5px] font-medium text-text-2">
+              {propertyConfig.hostInteraction.split(".")[0]}.
+            </div>
+          </div>
+          <ChevronRight />
+        </button>
       </Reveal>
 
       <Reveal>
@@ -127,58 +112,10 @@ export function HelpSection() {
   );
 }
 
-function SupportButton({
-  title,
-  subtitle,
-  onClick,
-  icon,
-  iconClassName,
-}: {
-  title: string;
-  subtitle: string;
-  onClick: () => void;
-  icon: React.ReactNode;
-  iconClassName: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex w-full cursor-pointer items-center gap-3.5 rounded-[18px] border border-line bg-card p-4 text-left shadow-premium active:scale-[0.985] hover:border-accent-2"
-    >
-      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-[13px] ${iconClassName}`}>
-        {icon}
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="text-[15px] font-semibold">{title}</div>
-        <div className="text-[12.5px] font-medium text-text-2">{subtitle}</div>
-      </div>
-      <ChevronRight />
-    </button>
-  );
-}
-
 function MessageIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 20.5l1.6-5A8.5 8.5 0 1 1 21 11.5Z" />
-    </svg>
-  );
-}
-
-function WhatsAppIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M3 21l1.7-4.4A8.5 8.5 0 1 1 8 19.4L3 21Z" />
-      <path d="M8.5 9.2c.2 2.3 3.9 6 6.2 6.2.7.1 1.3-.5 1.6-1.1.1-.3 0-.6-.3-.8l-1.7-.9c-.3-.1-.6-.1-.8.2l-.4.5c-1-.4-2-1.4-2.4-2.4l.5-.4c.3-.2.3-.5.2-.8l-.9-1.7c-.2-.3-.5-.4-.8-.3-.6.3-1.2.9-1.1 1.6Z" />
-    </svg>
-  );
-}
-
-function PhoneIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M5 4h3l1.5 5-2 1.5a11 11 0 0 0 5 5l1.5-2 5 1.5v3a2 2 0 0 1-2.2 2A16 16 0 0 1 3 6.2 2 2 0 0 1 5 4Z" />
     </svg>
   );
 }

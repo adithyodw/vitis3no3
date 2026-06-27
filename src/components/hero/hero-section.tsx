@@ -1,17 +1,12 @@
 "use client";
 
-import { PremiumButton } from "@/components/ui/primitives";
+import { PinDisplay } from "@/components/check-in/pin-display";
+import { ReservationCard } from "@/components/check-in/reservation-card";
 import { Reveal } from "@/components/ui/reveal";
 import type { Booking } from "@/types";
-import {
-  countNights,
-  firstName,
-  formatStayDate,
-  isArrivingToday,
-} from "@/lib/utils";
+import { firstName, isArrivingToday } from "@/lib/utils";
 import { propertyConfig } from "@/config/property";
 import Image from "next/image";
-import { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 interface HeroProps {
@@ -19,18 +14,19 @@ interface HeroProps {
   onNavigate: (tab: "wifi" | "maps" | "smart" | "help") => void;
 }
 
+function displayGuestName(name: string): string {
+  const trimmed = name.trim();
+  if (!trimmed || trimmed.toLowerCase() === "guest") return "Guest";
+  return firstName(trimmed);
+}
+
 export function Hero({ booking, onNavigate }: HeroProps) {
-  const [pinRevealed, setPinRevealed] = useState(true);
   const { scrollY } = useScroll();
   const imageY = useTransform(scrollY, [0, 500], [0, 90]);
   const imageScale = useTransform(scrollY, [0, 500], [1, 1.19]);
   const veilOpacity = useTransform(scrollY, [0, 700], [1, 1]);
-
-  const pinDigits = pinRevealed
-    ? booking.pinCode.split("")
-    : Array(booking.pinCode.length).fill("•");
-  const nights = countNights(booking.checkIn, booking.checkOut);
   const arrivingToday = isArrivingToday(booking.checkIn);
+  const guestLabel = displayGuestName(booking.guestName);
 
   return (
     <>
@@ -41,7 +37,7 @@ export function Hero({ booking, onNavigate }: HeroProps) {
         >
           <Image
             src="/assets/hero.jpg"
-            alt="Orchard Park villa garden entrance"
+            alt="Orchard Park Vitis 3 No. 3"
             fill
             priority
             sizes="468px"
@@ -59,10 +55,10 @@ export function Hero({ booking, onNavigate }: HeroProps) {
             </p>
           </Reveal>
           <Reveal delay={0.05}>
-            <h1 className="font-serif text-[46px] leading-[1.02] font-normal tracking-tight text-shadow-sm">
+            <h1 className="font-serif text-[46px] leading-[1.02] font-normal tracking-tight">
               Welcome,
               <br />
-              {firstName(booking.guestName)}.
+              {guestLabel}.
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
@@ -73,23 +69,13 @@ export function Hero({ booking, onNavigate }: HeroProps) {
           <Reveal delay={0.15}>
             <div className="mt-[22px] inline-flex items-center gap-2 rounded-full border border-white/24 bg-white/14 px-[15px] py-2.5 text-[13px] font-semibold backdrop-blur-[14px]">
               <span className="h-[7px] w-[7px] rounded-full bg-[#6FD08A] shadow-[0_0_0_3px_rgba(111,208,138,0.28)]" />
-              {arrivingToday ? "Arriving today" : "Your stay"} · Check-in{" "}
+              {arrivingToday ? "Arriving today" : "Your stay"} · Check-in from{" "}
               {propertyConfig.checkInTime}
             </div>
           </Reveal>
         </div>
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-float-cue text-white/85">
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M7 10l5 5 5-5" />
           </svg>
         </div>
@@ -99,89 +85,24 @@ export function Hero({ booking, onNavigate }: HeroProps) {
         <div className="mx-auto mb-[22px] h-1 w-[38px] rounded-full bg-line" />
 
         <Reveal>
-          <div className="rounded-[24px] border border-line bg-card p-5 shadow-premium">
-            <div className="mb-[18px] flex items-center justify-between">
-              <div className="text-xs font-semibold tracking-[0.16em] uppercase text-text-3">
-                Your reservation
-              </div>
-              <div className="text-xs font-medium text-text-3">
-                #{booking.bookingRef}
-              </div>
-            </div>
-            <div className="flex items-stretch gap-2">
-              <div className="flex-1">
-                <div className="mb-1.5 text-xs font-medium text-text-3">Check-in</div>
-                <div className="text-[17px] font-semibold tracking-tight">
-                  {formatStayDate(booking.checkIn)}
-                </div>
-                <div className="text-[13px] font-medium text-text-2">
-                  {propertyConfig.checkInTime}
-                </div>
-              </div>
-              <div className="flex items-center px-1 text-text-3">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
-                  <path d="M5 12h13M13 7l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <div className="flex-1 text-right">
-                <div className="mb-1.5 text-xs font-medium text-text-3">Checkout</div>
-                <div className="text-[17px] font-semibold tracking-tight">
-                  {formatStayDate(booking.checkOut)}
-                </div>
-                <div className="text-[13px] font-medium text-text-2">
-                  {propertyConfig.checkOutTime}
-                </div>
-              </div>
-            </div>
-            <div className="mt-[18px] flex gap-2 border-t border-line-2 pt-4">
-              <div className="flex flex-1 items-center gap-2 text-[13px] font-medium text-text-2">
-                <PinIcon />
-                {nights} {nights === 1 ? "night" : "nights"}
-              </div>
-              <div className="flex flex-1 items-center justify-end gap-2 text-[13px] font-medium text-text-2">
-                <GuestsIcon />
-                {booking.guestCount} guests
-              </div>
-            </div>
-          </div>
+          <ReservationCard booking={booking} />
         </Reveal>
 
         <Reveal className="mt-3.5">
-          <div className="relative overflow-hidden rounded-[24px] border border-line bg-gradient-to-br from-card to-card-2 p-[22px_20px] shadow-premium">
+          <div className="rounded-[24px] border border-line bg-gradient-to-br from-card to-card-2 p-[22px_20px] shadow-premium">
             <div className="mb-[18px] flex items-center gap-2.5">
               <div className="flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-accent-soft text-accent">
                 <KeyIcon />
               </div>
               <div>
-                <div className="text-[15px] font-semibold tracking-tight">Keyless entry</div>
-                <div className="text-[12.5px] font-medium text-text-2">Front door smart lock</div>
-              </div>
-            </div>
-            <div className="flex justify-between gap-2">
-              {pinDigits.map((digit, i) => (
-                <div
-                  key={i}
-                  className="flex aspect-[1/1.18] flex-1 items-center justify-center rounded-[14px] border border-line bg-bg-2 text-[26px] font-semibold tracking-normal"
-                >
-                  {digit}
+                <div className="text-[15px] font-semibold tracking-tight">Door access</div>
+                <div className="text-[12.5px] font-medium text-text-2">
+                  Keypad at main entrance · {booking.pinCode}
+                  {propertyConfig.pinSuffix}
                 </div>
-              ))}
-            </div>
-            {!pinRevealed && (
-              <PremiumButton
-                className="mt-3.5 w-full"
-                onClick={() => setPinRevealed(true)}
-              >
-                <EyeIcon />
-                Tap to reveal PIN
-              </PremiumButton>
-            )}
-            {pinRevealed && (
-              <div className="mt-3.5 flex items-center justify-center gap-2 text-[13px] font-medium text-text-2">
-                <CheckIcon />
-                Enter the code, then press the lock icon
               </div>
-            )}
+            </div>
+            <PinDisplay pinCode={booking.pinCode} />
           </div>
         </Reveal>
 
@@ -219,45 +140,11 @@ function QuickAction({
   );
 }
 
-function PinIcon() {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
-      <path d="M12 21s-7-4.5-7-9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7 4.5C19 16.5 12 21 12 21Z" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function GuestsIcon() {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <circle cx="9" cy="8" r="3" />
-      <path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 6.5a3 3 0 0 1 0 5.5M18.5 19a5.5 5.5 0 0 0-3-4.9" />
-    </svg>
-  );
-}
-
 function KeyIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <circle cx="8" cy="15" r="4" />
       <path d="M10.8 12.2 19 4M16 7l2.5 2.5M13.5 9.5 16 12" />
-    </svg>
-  );
-}
-
-function EyeIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
-      <circle cx="12" cy="12" r="2.6" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M4 12.5l5 5 11-11" />
     </svg>
   );
 }

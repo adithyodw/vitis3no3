@@ -1,54 +1,117 @@
 {
-  "houseRules": [
-    "No parties or events",
-    "No smoking indoors",
-    "Dispose of trash outside the gate",
-    "Keep the home clean and tidy",
-    "Respect the neighbours",
-    "Treat the home as your own"
-  ],
-  "faqs": [
+  "neighborhoodDescription": "",
+  "houseRulesConfig": {
+    "intro": "Guests are expected to follow your rules and may be removed from Airbnb if they don't.",
+    "petsAllowed": true,
+    "petsNote": "You can refuse pets, but must reasonably accommodate service animals.",
+    "maxPets": 1,
+    "eventsAllowed": false,
+    "smokingAllowed": false,
+    "quietHoursEnabled": true,
+    "quietHoursStart": "9:00 PM",
+    "quietHoursEnd": "7:00 AM",
+    "commercialPhotographyAllowed": true,
+    "maxGuests": 4,
+    "checkInSummary": "Arrive between 2:00 PM and Flexible",
+    "checkOutSummary": "Leave before 12:00 PM",
+    "additionalRules": "Please turn off the AC when you leave. Kindly take care of the furnishings. Remember to do your dishes. Please take out the trash before departure. No illegal substances are allowed on the premises. No smoking! A $300 fine will apply. Parties and events are not allowed"
+  },
+  "houseManual": [
     {
-      "q": "Can I check in early?",
-      "a": "Check-in is from 2:00 PM. If the villa is ready sooner, we are happy to let you in early — just message us on the day."
+      "id": "smart-home",
+      "title": "Smart Home",
+      "steps": [
+        "Control supported devices using Google Home.",
+        "Say \"Hey Google…\" followed by your request.",
+        "Examples: turn on the lights, turn off the AC, play music."
+      ]
     },
     {
-      "q": "Can I smoke?",
-      "a": "No smoking anywhere indoors. A USD 300 cleaning penalty applies. You are welcome to smoke in the private garden."
+      "id": "water-dispenser",
+      "title": "Water Dispenser",
+      "steps": [
+        "Switch on the power at the back before use.",
+        "Then press the dispenser button."
+      ]
     },
     {
-      "q": "Where is the pool?",
-      "a": "The swimming pool, gym and clubhouse are a short walk within Orchard Park. A day-use fee of about USD 5 per person is payable at the clubhouse."
+      "id": "microwave",
+      "title": "Microwave",
+      "steps": [
+        "Place food inside.",
+        "Close the door.",
+        "Select the desired heating time."
+      ]
     },
     {
-      "q": "How do I use Google Home?",
-      "a": "Just say \"Hey Google\" followed by your request — lights, AC, fans, TV and music all respond. See the Smart Home tab for exact phrases."
+      "id": "water-heater",
+      "title": "Water Heater",
+      "steps": [
+        "Available only in the master bathroom.",
+        "Turn on the hot water tap.",
+        "Please allow a few minutes for the water to heat."
+      ]
     },
     {
-      "q": "Where is the rubbish bin?",
-      "a": "Please bag your trash and dispose of it in the bins outside the front gate. Keep the home clean and tidy during your stay."
+      "id": "toiletries",
+      "title": "Toiletries",
+      "steps": [
+        "Complimentary shampoo, body wash, and towels are provided."
+      ]
     },
     {
-      "q": "WiFi not working?",
-      "a": "Reconnect using the network and password in the Guide tab. If it persists, unplug the router for 20 seconds, then message us."
-    },
-    {
-      "q": "Air conditioning?",
-      "a": "Use the remote on each nightstand or ask Google Home. We recommend 24°C for comfortable sleep in the tropics."
-    },
-    {
-      "q": "PIN not working?",
-      "a": "Enter the 5-digit PIN, then press the lock's key icon. If it still fails, message the host and we will let you in remotely."
+      "id": "stereo",
+      "title": "Stereo Speakers",
+      "steps": ["Connect using Bluetooth."]
     }
   ],
   "nearby": [
-    { "tag": "Coffee", "name": "Kopi Kenangan", "kind": "Specialty coffee", "dist": "4 min" },
-    { "tag": "Store", "name": "Indomaret Belian", "kind": "Convenience store", "dist": "3 min" },
-    { "tag": "Food", "name": "Rezeki Seafood", "kind": "Local restaurant", "dist": "6 min" },
-    { "tag": "ATM", "name": "BCA ATM", "kind": "Cash & banking", "dist": "5 min" },
-    { "tag": "Hospital", "name": "RS Awal Bros", "kind": "Hospital", "dist": "9 min" },
-    { "tag": "Ferry", "name": "Batam Centre Ferry", "kind": "To Singapore", "dist": "14 min" },
-    { "tag": "Mall", "name": "Mega Mall Batam", "kind": "Shopping", "dist": "12 min" },
-    { "tag": "Airport", "name": "Hang Nadim Airport", "kind": "Airport", "dist": "20 min" }
+    {
+      "tag": "Bakery",
+      "name": "Morning Bakery Park Avenue",
+      "kind": "Jl. Orchard Boulevard, Belian, Kec. Batam Kota, Kota Batam, Kepulauan Riau 29444",
+      "instagramUrl": "https://www.instagram.com/morningbakeryparkavenue/",
+      "mapsUrl": "https://share.google/zNtJEV8T9I7mpxlu8"
+    },
+    {
+      "tag": "Food",
+      "name": "Top 100 Niaga Mas",
+      "kind": "Local dining",
+      "mapsUrl": "https://share.google/Zqi2Aodse2X7JY0yx"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "When can I check in?",
+      "a": "Check-in starts at 2:00 PM. The end time is flexible — message us on Airbnb if you need to arrive outside the usual window."
+    },
+    {
+      "q": "When is checkout?",
+      "a": "Checkout is strictly at 12:00 PM. Our cleaning team arrives promptly at noon to prepare the home for the next guest."
+    },
+    {
+      "q": "How do I enter the property?",
+      "a": "Use the keypad at the main entrance. Enter your PIN code followed by the # key. Keep your PIN confidential."
+    },
+    {
+      "q": "How do I use Google Home?",
+      "a": "Say \"Hey Google\" followed by your request — for example, turn on the lights, turn off the AC, or play music."
+    },
+    {
+      "q": "Where is the pool?",
+      "a": "Guests may use the swimming pool and gym at the clubhouse. The approximate fee is USD $5 per person."
+    },
+    {
+      "q": "WiFi not working?",
+      "a": "Reconnect to the VITIS 3/3 network using the password in the Guide tab. If issues persist, message us on Airbnb."
+    },
+    {
+      "q": "Is hot water available?",
+      "a": "Hot water is available in the master bathroom only. Turn on the hot water tap and allow a few minutes for the water to heat."
+    },
+    {
+      "q": "How do I contact the host?",
+      "a": "Please contact us anytime through Airbnb messaging if you need assistance. We won't be available in person during your stay."
+    }
   ]
 }

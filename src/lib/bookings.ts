@@ -14,7 +14,7 @@ function loadBookingsFile(): Record<string, Omit<Booking, "token">> {
   }
 }
 
-export function getDemoBooking(): Booking {
+export function getDefaultBooking(token: string): Booking {
   const today = new Date();
   const checkIn = new Date(today);
   checkIn.setHours(14, 0, 0, 0);
@@ -23,14 +23,14 @@ export function getDemoBooking(): Booking {
   checkOut.setHours(12, 0, 0, 0);
 
   return {
-    id: "demo-booking",
-    token: siteConfig.demoToken,
+    id: "default-booking",
+    token,
     guestName: "Guest",
     guestCount: propertyConfig.maxGuests,
     checkIn: checkIn.toISOString(),
     checkOut: checkOut.toISOString(),
-    pinCode: process.env.DEMO_PIN_CODE ?? "47291",
-    bookingRef: "DEMO-0000",
+    pinCode: siteConfig.defaultPinCode,
+    bookingRef: "CONFIRMED",
     wifiSsid: siteConfig.defaultWifi.ssid,
     wifiPassword: siteConfig.defaultWifi.password,
   };
@@ -39,12 +39,13 @@ export function getDemoBooking(): Booking {
 export async function getBookingByToken(token: string): Promise<Booking | null> {
   if (!token) return null;
 
-  if (token === siteConfig.demoToken) {
-    return getDemoBooking();
-  }
-
   const bookings = loadBookingsFile();
   const record = bookings[token];
+
+  if (token === siteConfig.demoToken && !record) {
+    return getDefaultBooking(token);
+  }
+
   if (!record) return null;
 
   return {
@@ -52,5 +53,6 @@ export async function getBookingByToken(token: string): Promise<Booking | null> 
     token,
     wifiSsid: record.wifiSsid ?? siteConfig.defaultWifi.ssid,
     wifiPassword: record.wifiPassword ?? siteConfig.defaultWifi.password,
+    pinCode: record.pinCode ?? siteConfig.defaultPinCode,
   };
 }
