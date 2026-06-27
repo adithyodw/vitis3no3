@@ -10,7 +10,7 @@ export function SmartHomeSection() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <div className="px-[18px] pt-[84px] pb-10">
+    <div className="px-[18px] pt-6 pb-10">
       <SectionLabel>Tech-savvy villa</SectionLabel>
       <SectionTitle>
         Smart home

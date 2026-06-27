@@ -9,18 +9,17 @@ export function PropertyTypeSection() {
   return (
     <Card className="p-5">
       <h3 className="text-xl font-semibold tracking-tight">Property type</h3>
+      <p className="mt-1.5 text-[13px] font-medium text-text-2">
+        A quick overview of the home
+      </p>
 
-      <div className="mt-4 flex flex-col gap-3">
-        <FieldBox label="Which is most like your place?" value={pt.category} />
-        <FieldBox label="Property type" value={pt.type} note={pt.typeNote} />
-        <FieldBox
-          label="Listing type"
-          value={pt.listingType}
-          note={pt.listingTypeNote}
-        />
+      <div className="mt-5 flex flex-col gap-4">
+        <InfoRow label="Category" value={pt.category} />
+        <InfoRow label="Property type" value={pt.type} note={pt.typeNote} />
+        <InfoRow label="Listing type" value={pt.listingType} note={pt.listingTypeNote} />
         <div className="grid grid-cols-2 gap-3">
-          <SizeField label="Property size" value={String(pt.sizeSqm)} />
-          <FieldBox label="Unit" value={pt.sizeUnit} />
+          <InfoRow label="Indoor space" value={`${pt.sizeSqm} ${pt.sizeUnit.toLowerCase()}`} compact />
+          <InfoRow label="Entire place" value="Yes" compact />
         </div>
         <p className="text-[13px] leading-relaxed text-text-2">{pt.sizeNote}</p>
       </div>
@@ -28,42 +27,28 @@ export function PropertyTypeSection() {
   );
 }
 
-function FieldBox({
+function InfoRow({
   label,
   value,
   note,
+  compact,
 }: {
   label: string;
   value: string;
   note?: string;
+  compact?: boolean;
 }) {
   return (
-    <div>
-      <div className="rounded-2xl border border-line px-4 py-3.5">
-        <div className="text-[13px] font-medium text-text-2">{label}</div>
-        <div className="mt-0.5 flex items-center justify-between gap-2">
-          <span className="text-[15px] font-semibold">{value}</span>
-          <ChevronDown />
-        </div>
+    <div className={compact ? "" : "border-b border-line/70 pb-4 last:border-0 last:pb-0"}>
+      <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-text-3">
+        {label}
       </div>
-      {note ? <p className="mt-2 text-[13px] leading-relaxed text-text-2">{note}</p> : null}
+      <div className={`font-semibold tracking-tight text-text ${compact ? "mt-1 text-[15px]" : "mt-1.5 text-[17px]"}`}>
+        {value}
+      </div>
+      {note ? (
+        <p className="mt-2 text-[13px] leading-relaxed text-text-2">{note}</p>
+      ) : null}
     </div>
-  );
-}
-
-function SizeField({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-line px-4 py-3.5">
-      <div className="text-[13px] font-medium text-text-2">{label}</div>
-      <div className="mt-0.5 text-[15px] font-semibold">{value}</div>
-    </div>
-  );
-}
-
-function ChevronDown() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
-      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
   );
 }

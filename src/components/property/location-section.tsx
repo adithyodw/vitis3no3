@@ -10,8 +10,27 @@ export function LocationSection() {
   return (
     <div className="flex flex-col gap-3.5">
       <Card className="overflow-hidden p-0">
-        <h3 className="px-5 pt-5 text-xl font-semibold tracking-tight">Location</h3>
-        <div className="relative mt-4 h-[200px] overflow-hidden bg-bg-2">
+        <div className="px-5 pt-5 pb-4">
+          <h3 className="text-xl font-semibold tracking-tight">Location & directions</h3>
+          <address className="mt-3 text-[14px] leading-relaxed font-medium not-italic text-text-2">
+            {address.line1}
+            <br />
+            {address.line2}
+            <br />
+            {address.line3}
+            <br />
+            {address.line4}
+          </address>
+          <PremiumButton
+            className="mt-4 w-full"
+            onClick={() =>
+              window.open(propertyConfig.googleMapsUrl, "_blank", "noopener,noreferrer")
+            }
+          >
+            Open in Google Maps
+          </PremiumButton>
+        </div>
+        <div className="relative h-[200px] overflow-hidden border-t border-line bg-bg-2">
           <iframe
             title="Verified property location"
             src={`https://maps.google.com/maps?q=${mapQuery}&z=15&output=embed`}
@@ -27,48 +46,18 @@ export function LocationSection() {
       </Card>
 
       <LocationRow
-        title="Address"
-        description={
-          <>
-            {address.line1}
-            <br />
-            {address.line2}
-            <br />
-            {address.line3}
-            <br />
-            {address.line4}
-          </>
-        }
-        action={
-          <PremiumButton
-            className="mt-3 w-full"
-            onClick={() =>
-              window.open(propertyConfig.googleMapsUrl, "_blank", "noopener,noreferrer")
-            }
-          >
-            Open in Google Maps
-          </PremiumButton>
-        }
-      />
-
-      <LocationRow
         title="Guest access"
         description={propertyConfig.guestAccess.join(" · ")}
       />
 
-      <LocationRow
-        title="Security"
-        description={propertyConfig.securityDescription}
-      />
+      <LocationRow title="Security" description={propertyConfig.securityDescription} />
 
       {propertyConfig.neighborhoodDescription ? (
         <LocationRow
-          title="Neighbourhood description"
+          title="Neighbourhood"
           description={propertyConfig.neighborhoodDescription}
         />
       ) : null}
-
-      <LocationRow title="Host interaction" description={propertyConfig.hostInteraction} />
     </div>
   );
 }
@@ -76,17 +65,14 @@ export function LocationSection() {
 function LocationRow({
   title,
   description,
-  action,
 }: {
   title: string;
   description: React.ReactNode;
-  action?: React.ReactNode;
 }) {
   return (
     <Card className="px-5 py-4">
       <div className="text-[15px] font-semibold">{title}</div>
-      <div className="mt-1 text-sm leading-relaxed text-text-2">{description}</div>
-      {action}
+      <div className="mt-1.5 text-sm leading-relaxed text-text-2">{description}</div>
     </Card>
   );
 }

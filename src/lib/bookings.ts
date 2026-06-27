@@ -14,26 +14,24 @@ function loadBookingsFile(): Record<string, Omit<Booking, "token">> {
   }
 }
 
-export function getDefaultBooking(token: string): Booking {
-  const today = new Date();
-  const checkIn = new Date(today);
-  checkIn.setHours(14, 0, 0, 0);
-  const checkOut = new Date(today);
-  checkOut.setDate(checkOut.getDate() + 3);
-  checkOut.setHours(12, 0, 0, 0);
-
+export function getDefaultGuestBooking(): Booking {
   return {
-    id: "default-booking",
-    token,
+    id: "guest-booking",
+    token: "guest",
     guestName: "Guest",
     guestCount: propertyConfig.maxGuests,
-    checkIn: checkIn.toISOString(),
-    checkOut: checkOut.toISOString(),
+    checkIn: "",
+    checkOut: "",
     pinCode: siteConfig.defaultPinCode,
-    bookingRef: "CONFIRMED",
+    bookingRef: "",
     wifiSsid: siteConfig.defaultWifi.ssid,
     wifiPassword: siteConfig.defaultWifi.password,
   };
+}
+
+/** @deprecated Use getDefaultGuestBooking */
+export function getDefaultBooking(token: string): Booking {
+  return { ...getDefaultGuestBooking(), token };
 }
 
 export async function getBookingByToken(token: string): Promise<Booking | null> {
@@ -42,17 +40,19 @@ export async function getBookingByToken(token: string): Promise<Booking | null> 
   const bookings = loadBookingsFile();
   const record = bookings[token];
 
-  if (token === siteConfig.demoToken && !record) {
-    return getDefaultBooking(token);
+  if (record) {
+    return {
+      ...record,
+      token,
+      wifiSsid: record.wifiSsid ?? siteConfig.defaultWifi.ssid,
+      wifiPassword: record.wifiPassword ?? siteConfig.defaultWifi.password,
+      pinCode: record.pinCode ?? siteConfig.defaultPinCode,
+    };
   }
 
-  if (!record) return null;
+  if (token === siteConfig.legacyGuestToken) {
+    return getDefaultGuestBooking();
+  }
 
-  return {
-    ...record,
-    token,
-    wifiSsid: record.wifiSsid ?? siteConfig.defaultWifi.ssid,
-    wifiPassword: record.wifiPassword ?? siteConfig.defaultWifi.password,
-    pinCode: record.pinCode ?? siteConfig.defaultPinCode,
-  };
+  return null;
 }

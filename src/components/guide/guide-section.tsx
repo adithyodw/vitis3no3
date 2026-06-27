@@ -38,7 +38,7 @@ export function GuideSection({ booking }: GuideSectionProps) {
   };
 
   return (
-    <div className="px-[18px] pt-[84px] pb-10">
+    <div className="px-[18px] pt-6 pb-10">
       <SectionLabel>Make yourself at home</SectionLabel>
       <SectionTitle>House guide</SectionTitle>
 

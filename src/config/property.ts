@@ -59,8 +59,6 @@ export const propertyConfig = {
     "Private garden",
     "Smart lighting with color-changing lights",
     "Smart air conditioning",
-    "Remote-controlled ceiling fan",
-    "Cordless vacuum cleaner",
     "Air purifier",
     "Premium toiletries",
     "Bathtub",
@@ -71,7 +69,7 @@ export const propertyConfig = {
     "Netflix included",
     "High-speed Wi-Fi",
     "Klipsch Home Theatre",
-    "Bose Sound System",
+    "Google Home sound system",
   ],
   securityDescription:
     "Located inside a fully secured neighborhood with 24/7 security personnel.",
@@ -92,7 +90,7 @@ export const propertyConfig = {
     "Smart home devices",
   ],
   hostInteraction:
-    "I won't be available in person. Please contact me anytime through Airbnb messaging if you need assistance. The property is located in a secure neighborhood with 24-hour security.",
+    "I won't be available in person. Please message me on Airbnb or WhatsApp if you need assistance.",
   facilities: {
     items: ["Swimming Pool", "Gym"],
     feeNote: "Approximate fee: USD $5 per person.",
@@ -144,14 +142,6 @@ export const propertyConfig = {
       phrase: '"Hey Google, turn off the AC."',
     },
     {
-      id: "fan",
-      short: "FAN",
-      name: "Ceiling fan",
-      sub: "Remote controlled",
-      desc: "Use the remote control mounted on the wall.",
-      phrase: '"Hey Google, turn on the fan."',
-    },
-    {
       id: "google",
       short: "GH",
       name: "Google Home",
@@ -169,22 +159,15 @@ export const propertyConfig = {
     },
     {
       id: "audio",
-      short: "BOSE",
-      name: "Bose Sound System",
+      short: "AUDIO",
+      name: "Google Home Sound System",
       sub: "Klipsch Home Theatre",
-      desc: "Stream via AirPlay or connect stereo speakers using Bluetooth.",
+      desc: "Stream via Google Home, AirPlay, or Bluetooth.",
       phrase: '"Hey Google, play relaxing music."',
     },
-    {
-      id: "vac",
-      short: "VAC",
-      name: "Cordless vacuum",
-      sub: "On demand",
-      desc: "A cordless vacuum cleaner is available for your use.",
-      phrase: '"Hey Google, start vacuuming."',
-    },
   ] satisfies SmartDevice[],
-  nearby: cms.nearby as NearbyPlace[],
+  nearbyEssentials: cms.nearbyEssentials as NearbyPlace[],
+  batamDestinations: cms.batamDestinations as NearbyPlace[],
   faqs: cms.faqs as FaqItem[],
 } as const;
 
@@ -192,7 +175,9 @@ export const siteConfig = {
   host: {
     airbnbMessageUrl:
       process.env.NEXT_PUBLIC_HOST_AIRBNB_MESSAGE_URL ??
-      "https://www.airbnb.com/messaging",
+      "https://www.airbnb.com.sg/p/adithyodw",
+    whatsapp: process.env.NEXT_PUBLIC_HOST_WHATSAPP ?? "6590616870",
+    whatsappDisplay: process.env.NEXT_PUBLIC_HOST_WHATSAPP_DISPLAY ?? "+6590616870",
   },
   emergencyPhone: process.env.NEXT_PUBLIC_EMERGENCY_PHONE ?? "112",
   defaultWifi: {
@@ -200,5 +185,5 @@ export const siteConfig = {
     password: process.env.DEFAULT_WIFI_PASSWORD ?? "tanyasaya",
   },
   defaultPinCode: process.env.DEFAULT_PIN_CODE ?? "2026888",
-  demoToken: process.env.DEMO_BOOKING_TOKEN ?? "demo",
+  legacyGuestToken: process.env.LEGACY_GUEST_TOKEN ?? "demo",
 };

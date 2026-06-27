@@ -1,22 +1,16 @@
 "use client";
 
-import { PinDisplay } from "@/components/check-in/pin-display";
-import { ReservationCard } from "@/components/check-in/reservation-card";
 import { PropertyFeaturesCard } from "@/components/home/home-sections";
 import { LocationSection } from "@/components/property/location-section";
 import { PropertyTypeSection } from "@/components/property/property-type-section";
-import { Card, PremiumButton, SectionLabel, SectionTitle } from "@/components/ui/primitives";
+import { Card, SectionLabel, SectionTitle } from "@/components/ui/primitives";
 import { Reveal } from "@/components/ui/reveal";
 import { propertyConfig } from "@/config/property";
-import type { Booking } from "@/types";
+import type { NearbyPlace } from "@/types";
 
-interface ArrivalSectionProps {
-  booking: Booking;
-}
-
-export function ArrivalSection({ booking }: ArrivalSectionProps) {
+export function ArrivalSection() {
   return (
-    <div className="px-[18px] pt-[84px] pb-10">
+    <div className="px-[18px] pt-6 pb-10">
       <SectionLabel>{propertyConfig.directionsIntro}</SectionLabel>
       <SectionTitle>
         Arrival &<br />
@@ -36,29 +30,6 @@ export function ArrivalSection({ booking }: ArrivalSectionProps) {
       </Reveal>
 
       <Reveal className="mt-3.5">
-        <Card className="p-5">
-          <div className="text-base font-semibold">Directions</div>
-          <address className="mt-3 text-[15px] leading-relaxed font-medium not-italic text-text-2">
-            {propertyConfig.address.line1}
-            <br />
-            {propertyConfig.address.line2}
-            <br />
-            {propertyConfig.address.line3}
-            <br />
-            {propertyConfig.address.line4}
-          </address>
-          <PremiumButton
-            className="mt-4 w-full"
-            onClick={() =>
-              window.open(propertyConfig.googleMapsUrl, "_blank", "noopener,noreferrer")
-            }
-          >
-            Open in Google Maps
-          </PremiumButton>
-        </Card>
-      </Reveal>
-
-      <Reveal className="mt-3.5">
         <Card className="bg-card-2 p-[18px]">
           <div className="mb-2.5 flex items-center gap-2 text-sm font-semibold">
             <ShieldIcon />
@@ -71,20 +42,6 @@ export function ArrivalSection({ booking }: ArrivalSectionProps) {
       </Reveal>
 
       <Reveal className="mt-3.5">
-        <Card gradient className="p-5">
-          <div className="mb-4 text-[15px] font-semibold">Door access</div>
-          <p className="mb-4 text-[13.5px] leading-relaxed font-medium text-text-2">
-            Your check-in PIN:{" "}
-            <strong className="text-text">
-              {booking.pinCode}
-              {propertyConfig.pinSuffix}
-            </strong>
-          </p>
-          <PinDisplay pinCode={booking.pinCode} compact />
-        </Card>
-      </Reveal>
-
-      <Reveal className="mt-3.5">
         <Card className="p-5">
           <div className="mb-2 text-[15px] font-semibold">Check-in method</div>
           <p className="m-0 text-[13.5px] leading-relaxed font-medium text-text-2">
@@ -93,54 +50,69 @@ export function ArrivalSection({ booking }: ArrivalSectionProps) {
         </Card>
       </Reveal>
 
-      <Reveal className="mt-3.5">
-        <ReservationCard booking={booking} />
+      <Reveal className="mt-6">
+        <h3 className="mx-0.5 mb-1 font-serif text-[21px] tracking-tight">Nearby</h3>
+        <p className="mx-0.5 mb-3.5 text-[13px] font-medium text-text-2">
+          Essentials close to the property
+        </p>
       </Reveal>
+      <NearbyList places={propertyConfig.nearbyEssentials} />
 
       <Reveal className="mt-6">
-        <h3 className="mx-0.5 mb-3.5 font-serif text-[21px] tracking-tight">Nearby</h3>
+        <h3 className="mx-0.5 mb-1 font-serif text-[21px] tracking-tight">
+          Top destinations in Batam
+        </h3>
+        <p className="mx-0.5 mb-3.5 text-[13px] font-medium text-text-2">
+          Popular spots worth exploring during your stay
+        </p>
       </Reveal>
-      <div className="flex flex-col gap-2">
-        {propertyConfig.nearby.map((place, i) => (
-          <Reveal key={place.name} delay={i * 0.04}>
-            <div className="rounded-2xl border border-line bg-card p-[14px_16px] shadow-premium">
-              <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-accent-soft text-[11px] font-semibold text-accent">
-                  {place.tag}
+      <NearbyList places={propertyConfig.batamDestinations} />
+    </div>
+  );
+}
+
+function NearbyList({ places }: { places: NearbyPlace[] }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {places.map((place, i) => (
+        <Reveal key={place.name} delay={i * 0.03}>
+          <div className="rounded-2xl border border-line bg-card p-[14px_16px] shadow-premium">
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-accent-soft text-[11px] font-semibold text-accent">
+                {place.tag}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-semibold">{place.name}</div>
+                <div className="mt-0.5 text-xs leading-relaxed font-medium text-text-2">
+                  {place.kind}
                 </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm font-semibold">{place.name}</div>
-                  <div className="mt-0.5 text-xs leading-relaxed font-medium text-text-2">
-                    {place.kind}
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {place.mapsUrl ? (
-                      <a
-                        href={place.mapsUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs font-semibold text-accent underline underline-offset-2"
-                      >
-                        Google Maps
-                      </a>
-                    ) : null}
-                    {place.instagramUrl ? (
-                      <a
-                        href={place.instagramUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs font-semibold text-accent underline underline-offset-2"
-                      >
-                        Instagram
-                      </a>
-                    ) : null}
-                  </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {place.mapsUrl ? (
+                    <a
+                      href={place.mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold text-accent underline underline-offset-2"
+                    >
+                      Open in Maps
+                    </a>
+                  ) : null}
+                  {place.instagramUrl ? (
+                    <a
+                      href={place.instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold text-accent underline underline-offset-2"
+                    >
+                      Instagram
+                    </a>
+                  ) : null}
                 </div>
               </div>
             </div>
-          </Reveal>
-        ))}
-      </div>
+          </div>
+        </Reveal>
+      ))}
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import { ConciergeApp } from "@/components/concierge/concierge-app";
 import { getBookingByToken } from "@/lib/bookings";
-import { propertyConfig } from "@/config/property";
+import { propertyConfig, siteConfig } from "@/config/property";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 interface PageProps {
   params: Promise<{ token: string }>;
@@ -23,6 +23,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CheckInPage({ params }: PageProps) {
   const { token } = await params;
+
+  if (token === "demo" || token === siteConfig.legacyGuestToken) {
+    redirect("/checkin");
+  }
+
   const booking = await getBookingByToken(token);
 
   if (!booking) {

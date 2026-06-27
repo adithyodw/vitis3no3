@@ -31,6 +31,17 @@ export function FloatingSupport({ onNavigate }: FloatingSupportProps) {
               }}
             />
             <MenuAction
+              label="WhatsApp"
+              onClick={() => {
+                setOpen(false);
+                window.open(
+                  `https://wa.me/${siteConfig.host.whatsapp}`,
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+              }}
+            />
+            <MenuAction
               label="Help & FAQ"
               onClick={() => {
                 setOpen(false);

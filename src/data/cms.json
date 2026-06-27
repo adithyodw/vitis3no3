@@ -61,23 +61,91 @@
     },
     {
       "id": "stereo",
-      "title": "Stereo Speakers",
-      "steps": ["Connect using Bluetooth."]
+      "title": "Google Home Sound System",
+      "steps": ["Stream music via Google Home or connect using Bluetooth."]
     }
   ],
-  "nearby": [
+  "nearbyEssentials": [
     {
       "tag": "Bakery",
       "name": "Morning Bakery Park Avenue",
-      "kind": "Jl. Orchard Boulevard, Belian, Kec. Batam Kota, Kota Batam, Kepulauan Riau 29444",
+      "kind": "Jl. Orchard Boulevard, Belian, Kec. Batam Kota",
       "instagramUrl": "https://www.instagram.com/morningbakeryparkavenue/",
       "mapsUrl": "https://share.google/zNtJEV8T9I7mpxlu8"
     },
     {
       "tag": "Food",
       "name": "Top 100 Niaga Mas",
-      "kind": "Local dining",
+      "kind": "Local dining · Batam Kota",
       "mapsUrl": "https://share.google/Zqi2Aodse2X7JY0yx"
+    },
+    {
+      "tag": "Spa",
+      "name": "Massage recommendation",
+      "kind": "Host-recommended spa & massage",
+      "mapsUrl": "https://share.google/GQDzK1lGmIcJqL4Fx"
+    }
+  ],
+  "batamDestinations": [
+    {
+      "tag": "Mall",
+      "name": "Nagoya Hill Shopping Mall",
+      "kind": "Shopping & dining · Nagoya",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Nagoya+Hill+Shopping+Mall+Batam"
+    },
+    {
+      "tag": "Ferry",
+      "name": "Batam Centre Ferry Terminal",
+      "kind": "Ferry to Singapore · Batam Centre",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Batam+Centre+Ferry+Terminal"
+    },
+    {
+      "tag": "Bridge",
+      "name": "Barelang Bridge",
+      "kind": "Iconic bridge & coastal views",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Barelang+Bridge+Batam"
+    },
+    {
+      "tag": "Park",
+      "name": "Ocarina Park",
+      "kind": "Family park & waterfront · Batam Centre",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Ocarina+Park+Batam"
+    },
+    {
+      "tag": "Temple",
+      "name": "Maha Vihara Duta Maitreya",
+      "kind": "Buddhist temple · Sei Panas",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Maha+Vihara+Duta+Maitreya+Batam"
+    },
+    {
+      "tag": "Mall",
+      "name": "Grand Batam Mall",
+      "kind": "Shopping · Baloi",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Grand+Batam+Mall"
+    },
+    {
+      "tag": "Mall",
+      "name": "Batam City Square (BCS Mall)",
+      "kind": "Shopping & cinema · Nagoya",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Batam+City+Square"
+    },
+    {
+      "tag": "Ferry",
+      "name": "Harbour Bay Ferry Terminal",
+      "kind": "Ferry to Singapore · Sekupang",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Harbour+Bay+Ferry+Terminal+Batam"
+    },
+    {
+      "tag": "Food",
+      "name": "Nagoya Food Street",
+      "kind": "Local street food · Nagoya",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Nagoya+Food+Street+Batam"
+    },
+    {
+      "tag": "Beach",
+      "name": "Waterfront City Batam",
+      "kind": "Resort area & beach · Teluk Bakau",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Waterfront+City+Batam"
     }
   ],
   "faqs": [
@@ -111,7 +179,7 @@
     },
     {
       "q": "How do I contact the host?",
-      "a": "Please contact us anytime through Airbnb messaging if you need assistance. We won't be available in person during your stay."
+      "a": "Please contact us through Airbnb or WhatsApp if you need assistance. We won't be available in person during your stay."
     }
   ]
 }

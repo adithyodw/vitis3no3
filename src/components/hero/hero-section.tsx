@@ -1,10 +1,10 @@
 "use client";
 
-import { PinDisplay } from "@/components/check-in/pin-display";
-import { ReservationCard } from "@/components/check-in/reservation-card";
+import { DoorAccessCard } from "@/components/check-in/door-access-card";
+import { WelcomeCard } from "@/components/check-in/welcome-card";
 import { Reveal } from "@/components/ui/reveal";
 import type { Booking } from "@/types";
-import { firstName, isArrivingToday } from "@/lib/utils";
+import { firstName } from "@/lib/utils";
 import { propertyConfig } from "@/config/property";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -25,7 +25,6 @@ export function Hero({ booking, onNavigate }: HeroProps) {
   const imageY = useTransform(scrollY, [0, 500], [0, 90]);
   const imageScale = useTransform(scrollY, [0, 500], [1, 1.19]);
   const veilOpacity = useTransform(scrollY, [0, 700], [1, 1]);
-  const arrivingToday = isArrivingToday(booking.checkIn);
   const guestLabel = displayGuestName(booking.guestName);
 
   return (
@@ -69,8 +68,7 @@ export function Hero({ booking, onNavigate }: HeroProps) {
           <Reveal delay={0.15}>
             <div className="mt-[22px] inline-flex items-center gap-2 rounded-full border border-white/24 bg-white/14 px-[15px] py-2.5 text-[13px] font-semibold backdrop-blur-[14px]">
               <span className="h-[7px] w-[7px] rounded-full bg-[#6FD08A] shadow-[0_0_0_3px_rgba(111,208,138,0.28)]" />
-              {arrivingToday ? "Arriving today" : "Your stay"} · Check-in from{" "}
-              {propertyConfig.checkInTime}
+              Your stay · Check-in from {propertyConfig.checkInTime}
             </div>
           </Reveal>
         </div>
@@ -85,25 +83,11 @@ export function Hero({ booking, onNavigate }: HeroProps) {
         <div className="mx-auto mb-[22px] h-1 w-[38px] rounded-full bg-line" />
 
         <Reveal>
-          <ReservationCard booking={booking} />
+          <WelcomeCard guestName={booking.guestName} />
         </Reveal>
 
         <Reveal className="mt-3.5">
-          <div className="rounded-[24px] border border-line bg-gradient-to-br from-card to-card-2 p-[22px_20px] shadow-premium">
-            <div className="mb-[18px] flex items-center gap-2.5">
-              <div className="flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-accent-soft text-accent">
-                <KeyIcon />
-              </div>
-              <div>
-                <div className="text-[15px] font-semibold tracking-tight">Door access</div>
-                <div className="text-[12.5px] font-medium text-text-2">
-                  Keypad at main entrance · {booking.pinCode}
-                  {propertyConfig.pinSuffix}
-                </div>
-              </div>
-            </div>
-            <PinDisplay pinCode={booking.pinCode} />
-          </div>
+          <DoorAccessCard pinCode={booking.pinCode} />
         </Reveal>
 
         <Reveal className="mt-3.5">
@@ -137,15 +121,6 @@ function QuickAction({
       {icon}
       <span className="text-[11.5px] font-semibold">{label}</span>
     </button>
-  );
-}
-
-function KeyIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <circle cx="8" cy="15" r="4" />
-      <path d="M10.8 12.2 19 4M16 7l2.5 2.5M13.5 9.5 16 12" />
-    </svg>
   );
 }
 

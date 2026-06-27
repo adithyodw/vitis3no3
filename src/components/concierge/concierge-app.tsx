@@ -20,19 +20,11 @@ interface ConciergeAppProps {
 
 export function ConciergeApp({ booking }: ConciergeAppProps) {
   const [activeTab, setActiveTab] = useState<TabId>("home");
-  const [topbarVisible, setTopbarVisible] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const navigate = useCallback((tab: TabId) => {
     setActiveTab(tab);
-    setTopbarVisible(false);
     scrollRef.current?.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
-  }, []);
-
-  const handleScroll = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setTopbarVisible(el.scrollTop > 230);
   }, []);
 
   const handleHomeNavigate = useCallback(
@@ -46,30 +38,33 @@ export function ConciergeApp({ booking }: ConciergeAppProps) {
     [navigate],
   );
 
+  const showTopBar = activeTab !== "home";
+
   return (
     <div className="flex min-h-dvh w-full items-center justify-center bg-bg-2 font-sans text-text">
       <div className="relative flex h-dvh w-full max-w-[468px] flex-col overflow-hidden bg-bg shadow-premium-lg">
-        <header className="pointer-events-none absolute top-0 right-0 left-0 z-40 flex items-center justify-between gap-2.5 px-4 pt-[calc(14px+env(safe-area-inset-top))] pb-3.5">
-          <div
-            className="flex items-center gap-2.5 transition-all duration-350"
-            style={{
-              opacity: topbarVisible || activeTab !== "home" ? 1 : 0,
-              transform: topbarVisible || activeTab !== "home" ? "translateY(0)" : "translateY(-6px)",
-            }}
-          >
-            <div className="flex h-[30px] w-[30px] items-center justify-center rounded-[9px] bg-accent text-[13px] font-semibold tracking-wide text-white">
-              OP
+        {showTopBar ? (
+          <header className="z-40 flex shrink-0 items-center justify-between gap-2.5 border-b border-line/60 bg-bg/92 px-4 pt-[calc(14px+env(safe-area-inset-top))] pb-3.5 backdrop-blur-xl">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-[9px] bg-accent text-[13px] font-semibold tracking-wide text-white">
+                OP
+              </div>
+              <span className="text-sm font-semibold tracking-tight">
+                {propertyConfig.shortName}
+              </span>
             </div>
-            <span className="text-sm font-semibold tracking-tight">
-              {propertyConfig.shortName}
-            </span>
+            <ThemeToggle />
+          </header>
+        ) : (
+          <div className="pointer-events-none absolute top-0 right-0 z-40 px-4 pt-[calc(14px+env(safe-area-inset-top))]">
+            <div className="pointer-events-auto">
+              <ThemeToggle />
+            </div>
           </div>
-          <ThemeToggle />
-        </header>
+        )}
 
         <main
           ref={scrollRef}
-          onScroll={handleScroll}
           className="scrollbar-hide flex-1 overflow-x-hidden overflow-y-auto overscroll-contain"
         >
           <AnimatePresence mode="wait">
@@ -88,7 +83,7 @@ export function ConciergeApp({ booking }: ConciergeAppProps) {
                   </div>
                 </>
               )}
-              {activeTab === "arrival" && <ArrivalSection booking={booking} />}
+              {activeTab === "arrival" && <ArrivalSection />}
               {activeTab === "smart" && <SmartHomeSection />}
               {activeTab === "guide" && <GuideSection booking={booking} />}
               {activeTab === "help" && <HelpSection />}

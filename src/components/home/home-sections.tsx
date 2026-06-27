@@ -22,7 +22,7 @@ export function HomeNavigation({ onNavigate }: HomeNavProps) {
         <Reveal delay={0.05}>
           <NavRow
             title="Arrival & directions"
-            subtitle="Address, map, door PIN & check-in"
+            subtitle="Address, map & local recommendations"
             onClick={() => onNavigate("arrival")}
             icon={<MapPinIcon />}
           />
@@ -94,46 +94,72 @@ export function CheckoutFarewell({ guestName }: { guestName: string }) {
 
 export function PropertyFeaturesCard() {
   return (
-    <Card className="mb-0 p-5">
-      <div className="text-base font-semibold tracking-tight">{propertyConfig.title}</div>
-      <p className="mt-3 text-[13.5px] leading-relaxed font-medium text-text-2">
-        {propertyConfig.description}
-      </p>
+    <Card className="mb-0 overflow-hidden p-0">
+      <div className="border-b border-line px-5 py-5">
+        <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-text-3">
+          Property overview
+        </p>
+        <h3 className="mt-2 text-[18px] font-semibold leading-snug tracking-tight">
+          {propertyConfig.title}
+        </h3>
+        <p className="mt-3 text-[13.5px] leading-relaxed font-medium text-text-2">
+          {propertyConfig.description}
+        </p>
+      </div>
 
-      <div className="mt-4 text-sm font-semibold">Property layout</div>
-      <ul className="mt-2 space-y-1.5 text-[13.5px] leading-relaxed font-medium text-text-2">
-        <li>2-bedroom house</li>
-        <li>1 loft</li>
-        <li>1 King-size bed in the master bedroom with attached bathroom and water heater</li>
-        <li>1 Queen-size bed in the common bedroom</li>
-        <li>1 Tatami Queen-size bed in the loft</li>
-        <li>1 Common bathroom (no water heater)</li>
-      </ul>
-      <p className="mt-3 text-[13px] font-semibold text-text">{propertyConfig.layoutNote}</p>
-
-      <div className="mt-4 flex gap-2">
+      <div className="grid grid-cols-3 border-b border-line">
         {[
           { value: propertyConfig.sizeSqm, label: "sqm" },
           { value: propertyConfig.bedrooms, label: "bedrooms" },
           { value: propertyConfig.loft, label: "loft" },
-        ].map((stat) => (
-          <div key={stat.label} className="flex-1 rounded-[14px] bg-bg-2 py-3 text-center">
-            <div className="text-[17px] font-semibold">{stat.value}</div>
+        ].map((stat, i) => (
+          <div
+            key={stat.label}
+            className={`py-4 text-center ${i < 2 ? "border-r border-line" : ""}`}
+          >
+            <div className="text-[20px] font-semibold tabular-nums">{stat.value}</div>
             <div className="mt-0.5 text-[11px] font-medium text-text-3">{stat.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="mt-4 text-sm font-semibold">Property features</div>
-      <div className="mt-2 flex flex-wrap gap-2">
-        {propertyConfig.features.map((feature) => (
-          <span
-            key={feature}
-            className="rounded-full bg-bg-2 px-3 py-1.5 text-[12.5px] font-semibold"
-          >
-            {feature}
-          </span>
-        ))}
+      <div className="px-5 py-5">
+        <div className="text-sm font-semibold">Layout</div>
+        <ul className="mt-3 space-y-2.5">
+          {propertyConfig.beds.map((bed) => (
+            <li key={bed.room} className="flex gap-3 text-[13.5px] leading-relaxed">
+              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+              <span>
+                <span className="font-semibold text-text">{bed.room}</span>
+                <span className="font-medium text-text-2"> · {bed.detail}</span>
+              </span>
+            </li>
+          ))}
+          <li className="flex gap-3 text-[13.5px] leading-relaxed">
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+            <span>
+              <span className="font-semibold text-text">Common bathroom</span>
+              <span className="font-medium text-text-2"> · {propertyConfig.bathrooms.common}</span>
+            </span>
+          </li>
+        </ul>
+        <p className="mt-4 rounded-xl bg-bg-2 px-3.5 py-3 text-[13px] font-medium text-text-2">
+          {propertyConfig.layoutNote}
+        </p>
+      </div>
+
+      <div className="border-t border-line px-5 py-5">
+        <div className="text-sm font-semibold">Highlights</div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {propertyConfig.features.map((feature) => (
+            <span
+              key={feature}
+              className="rounded-full border border-line bg-bg-2/80 px-3 py-1.5 text-[12px] font-semibold text-text"
+            >
+              {feature}
+            </span>
+          ))}
+        </div>
       </div>
     </Card>
   );
