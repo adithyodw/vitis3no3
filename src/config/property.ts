@@ -45,7 +45,8 @@ export const propertyConfig = {
   propertyType: {
     category: "House",
     type: "Villa",
-    typeNote: "A luxury home that may have indoor-outdoor spaces, gardens, and pools.",
+    typeNote:
+      "A luxury home with indoor-outdoor spaces and a private garden. Pool, gym, and other clubhouse amenities are available nearby as paid services at the Orchard Park clubhouse.",
     listingType: "Entire place",
     listingTypeNote:
       "Guests have the whole place to themselves. This usually includes a bedroom, a bathroom and a kitchen.",
