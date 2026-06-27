@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<script src="image-slot.js"></script>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'Hanken Grotesk', system-ui, sans-serif; background: #0c0b09; }
+  :root {
+    --bg: #F3EFE8; --bg-2: #E9E3D8; --card: #FFFFFF; --card-2: #FBF8F2;
+    --text: #181410; --text-2: #6A6157; --text-3: #9D9489;
+    --line: rgba(24,20,16,0.09); --line-2: rgba(24,20,16,0.05);
+    --accent: #A07A35; --accent-2: #B89150; --accent-soft: rgba(160,122,53,0.10);
+    --shadow: 0 6px 28px rgba(48,36,18,0.09); --shadow-lg: 0 18px 50px rgba(48,36,18,0.16);
+    --glass: rgba(247,244,238,0.72); --danger: #B0492F;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #100E0B; --bg-2: #17140F; --card: #1B1712; --card-2: #211C16;
+      --text: #F4EFE5; --text-2: #A79D8E; --text-3: #6E665A;
+      --line: rgba(244,239,229,0.10); --line-2: rgba(244,239,229,0.055);
+      --accent: #CBA85E; --accent-2: #D8BC78; --accent-soft: rgba(203,168,94,0.14);
+      --shadow: 0 8px 32px rgba(0,0,0,0.40); --shadow-lg: 0 22px 60px rgba(0,0,0,0.55);
+      --glass: rgba(20,17,13,0.66); --danger: #E08163;
+    }
+  }
+  [data-theme="light"] {
+    --bg: #F3EFE8; --bg-2: #E9E3D8; --card: #FFFFFF; --card-2: #FBF8F2;
+    --text: #181410; --text-2: #6A6157; --text-3: #9D9489;
+    --line: rgba(24,20,16,0.09); --line-2: rgba(24,20,16,0.05);
+    --accent: #A07A35; --accent-2: #B89150; --accent-soft: rgba(160,122,53,0.10);
+    --shadow: 0 6px 28px rgba(48,36,18,0.09); --shadow-lg: 0 18px 50px rgba(48,36,18,0.16);
+    --glass: rgba(247,244,238,0.72); --danger: #B0492F;
+  }
+  [data-theme="dark"] {
+    --bg: #100E0B; --bg-2: #17140F; --card: #1B1712; --card-2: #211C16;
+    --text: #F4EFE5; --text-2: #A79D8E; --text-3: #6E665A;
+    --line: rgba(244,239,229,0.10); --line-2: rgba(244,239,229,0.055);
+    --accent: #CBA85E; --accent-2: #D8BC78; --accent-soft: rgba(203,168,94,0.14);
+    --shadow: 0 8px 32px rgba(0,0,0,0.40); --shadow-lg: 0 22px 60px rgba(0,0,0,0.55);
+    --glass: rgba(20,17,13,0.66); --danger: #E08163;
+  }
+  @keyframes floatcue { 0%,100% { transform: translateY(0); opacity:.65 } 50% { transform: translateY(7px); opacity:1 } }
+  @keyframes popin { 0% { transform: translateY(8px) scale(.8); opacity:0 } 100% { transform: none; opacity:1 } }
+  .ohide::-webkit-scrollbar { width: 0; height: 0; }
+  image-slot { display:block; }
+</style>
+</helmet>
+
+<div data-theme="{{ themeAttr }}" style="min-height:100dvh;width:100%;background:var(--bg-2);display:flex;align-items:center;justify-content:center;font-family:'Hanken Grotesk',sans-serif;color:var(--text);">
+  <div style="position:relative;width:100%;max-width:468px;height:100dvh;background:var(--bg);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);">
+
+    <!-- sticky top bar -->
+    <div style="position:absolute;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px calc(14px);pointer-events:none;">
+      <div data-topbar="{{ topbarOn }}" style="display:flex;align-items:center;gap:10px;opacity:{{ topbarOpacity }};transform:translateY({{ topbarShift }});transition:opacity .35s ease, transform .35s ease;">
+        <div style="width:30px;height:30px;border-radius:9px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font:600 13px 'Hanken Grotesk';letter-spacing:.02em;">OP</div>
+        <span style="font:600 14px 'Hanken Grotesk';color:var(--text);letter-spacing:-0.01em;">Orchard Park</span>
+      </div>
+      <button onClick="{{ toggleTheme }}" aria-label="Toggle theme" style="pointer-events:auto;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;" style-active="transform:scale(.92)">
+        <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+        </sc-if>
+        <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.3 6.3 0 0 0 10.5 10.5Z"/></svg>
+        </sc-if>
+      </button>
+    </div>
+
+    <!-- scroll content -->
+    <div class="ohide" ref="{{ setScroll }}" style="flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;">
+
+      <!-- ============ HOME ============ -->
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Home">
+          <!-- HERO -->
+          <div style="position:relative;height:72dvh;min-height:470px;overflow:hidden;">
+            <img ref="{{ setHeroImg }}" src="assets/hero.jpg" alt="Orchard Park villa garden entrance" style="position:absolute;top:-18%;left:0;width:100%;height:136%;object-fit:cover;will-change:transform;"/>
+            <div ref="{{ setHeroVeil }}" style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,8,5,0.18) 0%, rgba(10,8,5,0.04) 38%, rgba(10,8,5,0.55) 78%, rgba(10,8,5,0.86) 100%);"></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:0 22px 40px;color:#fff;">
+              <div data-reveal style="font:600 12px 'Hanken Grotesk';letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,0.82);margin-bottom:16px;">Orchard Park · Batam</div>
+              <h1 data-reveal style="margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:46px;line-height:1.02;letter-spacing:-0.01em;text-shadow:0 2px 24px rgba(0,0,0,0.28);">Welcome,<br>Marcus.</h1>
+              <p data-reveal style="margin:16px 0 22px;font-family:'Newsreader',serif;font-style:italic;font-size:19px;color:rgba(255,255,255,0.9);">Your stay begins here.</p>
+              <div data-reveal style="display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border-radius:100px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.24);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font:600 13px 'Hanken Grotesk';">
+                <span style="width:7px;height:7px;border-radius:50%;background:#6FD08A;box-shadow:0 0 0 3px rgba(111,208,138,0.28);"></span>
+                Arriving today · Check-in 2:00 PM
+              </div>
+            </div>
+            <div style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);animation:floatcue 2.4s ease-in-out infinite;color:rgba(255,255,255,0.85);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10l5 5 5-5"/></svg>
+            </div>
+          </div>
+
+          <!-- BODY -->
+          <div style="position:relative;margin-top:-26px;border-radius:28px 28px 0 0;background:var(--bg);padding:26px 18px 40px;">
+            <div style="width:38px;height:4px;border-radius:100px;background:var(--line);margin:0 auto 22px;"></div>
+
+            <!-- stay summary -->
+            <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:20px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+                <div style="font:600 12px 'Hanken Grotesk';letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);">Your reservation</div>
+                <div style="font:500 12px 'Hanken Grotesk';color:var(--text-3);">#HMXQ-7F3K</div>
+              </div>
+              <div style="display:flex;align-items:stretch;gap:8px;">
+                <div style="flex:1;">
+                  <div style="font:500 12px 'Hanken Grotesk';color:var(--text-3);margin-bottom:5px;">Check-in</div>
+                  <div style="font:600 17px 'Hanken Grotesk';letter-spacing:-0.01em;">Sat, Jun 27</div>
+                  <div style="font:500 13px 'Hanken Grotesk';color:var(--text-2);">2:00 PM</div>
+                </div>
+                <div style="display:flex;align-items:center;color:var(--text-3);padding:0 4px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 7l5 5-5 5"/></svg>
+                </div>
+                <div style="flex:1;text-align:right;">
+                  <div style="font:500 12px 'Hanken Grotesk';color:var(--text-3);margin-bottom:5px;">Checkout</div>
+                  <div style="font:600 17px 'Hanken Grotesk';letter-spacing:-0.01em;">Tue, Jun 30</div>
+                  <div style="font:500 13px 'Hanken Grotesk';color:var(--text-2);">12:00 PM</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line-2);">
+                <div style="flex:1;display:flex;align-items:center;gap:8px;font:500 13px 'Hanken Grotesk';color:var(--text-2);">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.5-7-9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7 4.5C19 16.5 12 21 12 21Z" stroke-linejoin="round"/></svg>
+                  3 nights
+                </div>
+                <div style="flex:1;display:flex;align-items:center;gap:8px;font:500 13px 'Hanken Grotesk';color:var(--text-2);justify-content:flex-end;">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 6.5a3 3 0 0 1 0 5.5M18.5 19a5.5 5.5 0 0 0-3-4.9"/></svg>
+                  4 guests
+                </div>
+              </div>
+            </div>
+
+            <!-- PIN card -->
+            <div data-reveal style="margin-top:14px;background:linear-gradient(160deg, var(--card) 0%, var(--card-2) 100%);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px 20px;overflow:hidden;position:relative;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                <div style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 19 4M16 7l2.5 2.5M13.5 9.5 16 12"/></svg>
+                </div>
+                <div>
+                  <div style="font:600 15px 'Hanken Grotesk';letter-spacing:-0.01em;">Keyless entry</div>
+                  <div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);">Front door smart lock</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:9px;justify-content:space-between;">
+                <sc-for list="{{ pinDisplay }}" as="d" hint-placeholder-count="5">
+                  <div style="flex:1;aspect-ratio:1/1.18;border-radius:14px;background:var(--bg-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font:600 26px 'Hanken Grotesk';color:var(--text);letter-spacing:0;">{{ d }}</div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ pinHidden }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ revealPin }}" style="margin-top:14px;width:100%;padding:13px;border-radius:13px;border:none;background:var(--accent);color:#fff;font:600 14.5px 'Hanken Grotesk';cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;" style-active="transform:scale(.98)" style-hover="background:var(--accent-2)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="2.6"/></svg>
+                  Tap to reveal PIN
+                </button>
+              </sc-if>
+              <sc-if value="{{ pinShown }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;font:500 13px 'Hanken Grotesk';color:var(--text-2);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5 11-11"/></svg>
+                  Enter the code, then press the lock icon
+                </div>
+              </sc-if>
+            </div>
+
+            <!-- quick actions -->
+            <div data-reveal style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px;">
+              <button onClick="{{ goWifi }}" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:15px 6px;border-radius:18px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;" style-active="transform:scale(.95)" style-hover="border-color:var(--accent-2)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12a10.5 10.5 0 0 1 14 0M8 15.2a6 6 0 0 1 8 0"/><circle cx="12" cy="19" r="1.1" fill="var(--accent)" stroke="none"/></svg>
+                <span style="font:600 11.5px 'Hanken Grotesk';">Wi-Fi</span>
+              </button>
+              <button onClick="{{ openMaps }}" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:15px 6px;border-radius:18px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;" style-active="transform:scale(.95)" style-hover="border-color:var(--accent-2)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.2-7-10.5A7 7 0 0 1 19 10.5C19 15.8 12 21 12 21Z"/><circle cx="12" cy="10.3" r="2.4"/></svg>
+                <span style="font:600 11.5px 'Hanken Grotesk';">Maps</span>
+              </button>
+              <button onClick="{{ goSmart }}" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:15px 6px;border-radius:18px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;" style-active="transform:scale(.95)" style-hover="border-color:var(--accent-2)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><rect x="9" y="9" width="6" height="6" rx="1.4"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>
+                <span style="font:600 11.5px 'Hanken Grotesk';">Smart</span>
+              </button>
+              <button onClick="{{ goHelp }}" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:15px 6px;border-radius:18px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;" style-active="transform:scale(.95)" style-hover="border-color:var(--accent-2)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 20.5l1.6-5A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+                <span style="font:600 11.5px 'Hanken Grotesk';">Help</span>
+              </button>
+            </div>
+
+            <!-- section nav -->
+            <div data-reveal style="margin:28px 2px 14px;font-family:'Newsreader',serif;font-size:23px;letter-spacing:-0.01em;">Everything you need</div>
+            <div style="display:flex;flex-direction:column;gap:11px;">
+              <button data-reveal onClick="{{ goArrival }}" style="text-align:left;display:flex;align-items:center;gap:15px;padding:17px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;box-shadow:var(--shadow);" style-active="transform:scale(.985)" style-hover="border-color:var(--accent-2)">
+                <div style="width:44px;height:44px;border-radius:13px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.2-7-10.5A7 7 0 0 1 19 10.5C19 15.8 12 21 12 21Z"/><circle cx="12" cy="10.3" r="2.4"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div style="font:600 15.5px 'Hanken Grotesk';letter-spacing:-0.01em;">Arrival &amp; directions</div>
+                  <div style="font:500 13px 'Hanken Grotesk';color:var(--text-2);margin-top:2px;">Address, map, door PIN &amp; check-in</div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <button data-reveal onClick="{{ goSmart }}" style="text-align:left;display:flex;align-items:center;gap:15px;padding:17px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;box-shadow:var(--shadow);" style-active="transform:scale(.985)" style-hover="border-color:var(--accent-2)">
+                <div style="width:44px;height:44px;border-radius:13px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><rect x="9" y="9" width="6" height="6" rx="1.4"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div style="font:600 15.5px 'Hanken Grotesk';letter-spacing:-0.01em;">Smart home guide</div>
+                  <div style="font:500 13px 'Hanken Grotesk';color:var(--text-2);margin-top:2px;">Lights, AC, TV, audio &amp; Google Home</div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <button data-reveal onClick="{{ goGuide }}" style="text-align:left;display:flex;align-items:center;gap:15px;padding:17px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;box-shadow:var(--shadow);" style-active="transform:scale(.985)" style-hover="border-color:var(--accent-2)">
+                <div style="width:44px;height:44px;border-radius:13px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6.5A1.5 1.5 0 0 1 5 19.5Z"/><path d="M5 17.5A1.5 1.5 0 0 1 6.5 16H19"/><path d="M9 7.5h6"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div style="font:600 15.5px 'Hanken Grotesk';letter-spacing:-0.01em;">House guide</div>
+                  <div style="font:500 13px 'Hanken Grotesk';color:var(--text-2);margin-top:2px;">Rules, Wi-Fi, facilities &amp; checkout</div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+
+            <!-- host strip -->
+            <div data-reveal style="margin-top:22px;display:flex;align-items:center;gap:14px;padding:16px;border-radius:20px;background:var(--card-2);border:1px solid var(--line);">
+              <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;display:flex;align-items:center;justify-content:center;font:600 17px 'Newsreader',serif;flex-shrink:0;">A</div>
+              <div style="flex:1;">
+                <div style="font:500 12px 'Hanken Grotesk';color:var(--text-3);">Your host</div>
+                <div style="font:600 15px 'Hanken Grotesk';letter-spacing:-0.01em;">Anya · Superhost</div>
+              </div>
+              <button onClick="{{ goHelp }}" style="padding:10px 16px;border-radius:100px;border:1px solid var(--accent);background:transparent;color:var(--accent);font:600 13px 'Hanken Grotesk';cursor:pointer;" style-active="transform:scale(.96)" style-hover="background:var(--accent-soft)">Message</button>
+            </div>
+
+            <div style="text-align:center;margin-top:28px;font:500 12px 'Hanken Grotesk';color:var(--text-3);line-height:1.6;">
+              Orchard Park · Vitis 3 No.3<br>Batam Kota, Kepulauan Riau
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ ARRIVAL ============ -->
+      <sc-if value="{{ isArrival }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Arrival" style="padding:84px 18px 40px;">
+          <div data-reveal style="font:600 12px 'Hanken Grotesk';letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">Getting in</div>
+          <h2 data-reveal style="margin:0 0 22px;font-family:'Newsreader',serif;font-weight:400;font-size:34px;letter-spacing:-0.01em;line-height:1.05;">Arrival &amp;<br>directions</h2>
+
+          <!-- property -->
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px;margin-bottom:14px;">
+            <div style="font:600 16px 'Hanken Grotesk';letter-spacing:-0.01em;">Smart Home Villa</div>
+            <div style="font:500 13px 'Hanken Grotesk';color:var(--text-2);margin-top:3px;">Tech-savvy villa · 2 bedrooms · 1 loft</div>
+            <div style="display:flex;gap:8px;margin-top:16px;">
+              <div style="flex:1;text-align:center;padding:12px 6px;border-radius:14px;background:var(--bg-2);"><div style="font:600 17px 'Hanken Grotesk';">130</div><div style="font:500 11px 'Hanken Grotesk';color:var(--text-3);margin-top:2px;">sqm</div></div>
+              <div style="flex:1;text-align:center;padding:12px 6px;border-radius:14px;background:var(--bg-2);"><div style="font:600 17px 'Hanken Grotesk';">2</div><div style="font:500 11px 'Hanken Grotesk';color:var(--text-3);margin-top:2px;">bedrooms</div></div>
+              <div style="flex:1;text-align:center;padding:12px 6px;border-radius:14px;background:var(--bg-2);"><div style="font:600 17px 'Hanken Grotesk';">4</div><div style="font:500 11px 'Hanken Grotesk';color:var(--text-3);margin-top:2px;">guests</div></div>
+            </div>
+          </div>
+
+          <!-- map -->
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px;">
+            <div style="position:relative;height:170px;background:
+                linear-gradient(0deg, rgba(0,0,0,0.04), rgba(0,0,0,0.04)),
+                repeating-linear-gradient(0deg, var(--line-2) 0 1px, transparent 1px 26px),
+                repeating-linear-gradient(90deg, var(--line-2) 0 1px, transparent 1px 26px),
+                var(--bg-2);">
+              <div style="position:absolute;top:38%;left:-6%;width:130%;height:13px;background:var(--accent-soft);transform:rotate(-7deg);"></div>
+              <div style="position:absolute;top:64%;left:-6%;width:130%;height:9px;background:var(--line);transform:rotate(4deg);"></div>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-100%);">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="var(--accent)" stroke="#fff" stroke-width="1.4"><path d="M12 22s-7-5.2-7-10.5A7 7 0 0 1 19 11.5C19 16.8 12 22 12 22Z"/><circle cx="12" cy="11" r="2.6" fill="#fff" stroke="none"/></svg>
+              </div>
+            </div>
+            <div style="padding:18px 20px;">
+              <div style="font:600 12px 'Hanken Grotesk';letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">Address</div>
+              <div style="font:500 15px 'Hanken Grotesk';line-height:1.5;color:var(--text);">Orchard Park Vitis 3 No.3<br>Jl. Orchard Boulevard, Belian<br>Batam Kota, Kepulauan Riau 29444</div>
+              <button onClick="{{ openMaps }}" style="margin-top:16px;width:100%;padding:13px;border-radius:13px;border:none;background:var(--accent);color:#fff;font:600 14.5px 'Hanken Grotesk';cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;" style-active="transform:scale(.98)" style-hover="background:var(--accent-2)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.2-7-10.5A7 7 0 0 1 19 10.5C19 15.8 12 21 12 21Z"/><circle cx="12" cy="10.3" r="2.4"/></svg>
+                Open in Google Maps
+              </button>
+            </div>
+          </div>
+
+          <!-- pin reveal -->
+          <div data-reveal style="background:linear-gradient(160deg,var(--card) 0%,var(--card-2) 100%);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px;margin-bottom:14px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+              <div style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 19 4M16 7l2.5 2.5M13.5 9.5 16 12"/></svg>
+              </div>
+              <div><div style="font:600 15px 'Hanken Grotesk';">Front door PIN</div><div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);">Keyless smart lock</div></div>
+            </div>
+            <div style="display:flex;gap:9px;justify-content:space-between;">
+              <sc-for list="{{ pinDisplay }}" as="d" hint-placeholder-count="5">
+                <div style="flex:1;aspect-ratio:1/1.18;border-radius:14px;background:var(--bg-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font:600 26px 'Hanken Grotesk';color:var(--text);">{{ d }}</div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ pinHidden }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ revealPin }}" style="margin-top:14px;width:100%;padding:13px;border-radius:13px;border:1px solid var(--accent);background:transparent;color:var(--accent);font:600 14px 'Hanken Grotesk';cursor:pointer;" style-active="transform:scale(.98)" style-hover="background:var(--accent-soft)">Tap to reveal PIN</button>
+            </sc-if>
+          </div>
+
+          <!-- times -->
+          <div data-reveal style="display:flex;gap:11px;margin-bottom:14px;">
+            <div style="flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);">
+              <div style="font:500 12px 'Hanken Grotesk';color:var(--text-3);">Check-in from</div>
+              <div style="font:600 24px 'Hanken Grotesk';letter-spacing:-0.02em;margin-top:5px;">2:00<span style="font-size:13px;color:var(--text-2);margin-left:3px;">PM</span></div>
+            </div>
+            <div style="flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);">
+              <div style="font:500 12px 'Hanken Grotesk';color:var(--text-3);">Checkout by</div>
+              <div style="font:600 24px 'Hanken Grotesk';letter-spacing:-0.02em;margin-top:5px;">12:00<span style="font-size:13px;color:var(--text-2);margin-left:3px;">PM</span></div>
+            </div>
+          </div>
+
+          <!-- security note -->
+          <div data-reveal style="background:var(--card-2);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:22px;">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;font:600 14px 'Hanken Grotesk';"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5.5c0 4.3 3 7.6 7 9 4-1.4 7-4.7 7-9V6Z"/></svg>At the security gate</div>
+            <p style="margin:0;font:500 13.5px 'Hanken Grotesk';color:var(--text-2);line-height:1.6;">Tell security: <span style="color:var(--text);font-weight:600;">"I'm staying at Orchard Park Vitis 3 No.3."</span> They may photograph your ID — you do not need to hand over your identification.</p>
+          </div>
+
+          <!-- nearby -->
+          <div data-reveal style="font-family:'Newsreader',serif;font-size:21px;letter-spacing:-0.01em;margin:0 2px 13px;">Nearby, curated</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <sc-for list="{{ nearby }}" as="n" hint-placeholder-count="6">
+              <div data-reveal style="display:flex;align-items:center;gap:13px;padding:14px 16px;border-radius:16px;background:var(--card);border:1px solid var(--line);">
+                <div style="width:36px;height:36px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;font:600 11px 'Hanken Grotesk';">{{ n.tag }}</div>
+                <div style="flex:1;"><div style="font:600 14px 'Hanken Grotesk';">{{ n.name }}</div><div style="font:500 12px 'Hanken Grotesk';color:var(--text-2);">{{ n.kind }}</div></div>
+                <div style="font:600 12.5px 'Hanken Grotesk';color:var(--text-3);">{{ n.dist }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ SMART HOME ============ -->
+      <sc-if value="{{ isSmart }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Smart Home" style="padding:84px 18px 40px;">
+          <div data-reveal style="font:600 12px 'Hanken Grotesk';letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">Tech-savvy villa</div>
+          <h2 data-reveal style="margin:0 0 20px;font-family:'Newsreader',serif;font-weight:400;font-size:34px;letter-spacing:-0.01em;line-height:1.05;">Smart home<br>guide</h2>
+
+          <!-- google home hero -->
+          <div data-reveal style="background:linear-gradient(155deg,var(--accent) 0%,var(--accent-2) 100%);border-radius:22px;padding:22px;color:#fff;margin-bottom:16px;box-shadow:var(--shadow);">
+            <div style="display:flex;align-items:center;gap:9px;font:600 12px 'Hanken Grotesk';letter-spacing:.12em;text-transform:uppercase;opacity:.9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v9M8.5 6.5v5M15.5 6.5v5M5 9v3M19 9v3"/></svg>Powered by Google Home</div>
+            <div style="margin-top:14px;font-family:'Newsreader',serif;font-size:24px;line-height:1.2;">"Hey&nbsp;Google,<br>turn off the lights."</div>
+            <p style="margin:12px 0 0;font:500 13px 'Hanken Grotesk';opacity:.92;line-height:1.55;">Speak naturally to control everything in the villa. Tap any device below for the exact phrases.</p>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <sc-for list="{{ devices }}" as="dv" hint-placeholder-count="6">
+              <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;">
+                <button onClick="{{ dv.toggle }}" style="width:100%;text-align:left;display:flex;align-items:center;gap:13px;padding:16px 17px;border:none;background:transparent;color:var(--text);cursor:pointer;" style-active="background:var(--card-2)">
+                  <div style="width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;" data-om-raster><span style="font:600 9px 'Hanken Grotesk';">{{ dv.short }}</span></div>
+                  <div style="flex:1;"><div style="font:600 15px 'Hanken Grotesk';letter-spacing:-0.01em;">{{ dv.name }}</div><div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);margin-top:1px;">{{ dv.sub }}</div></div>
+                  <div style="color:var(--text-3);transform:rotate({{ dv.rot }});transition:transform .3s ease;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+                </button>
+                <sc-if value="{{ dv.isOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:2px 17px 18px;">
+                    <p style="margin:0 0 13px;font:500 13.5px 'Hanken Grotesk';color:var(--text-2);line-height:1.6;">{{ dv.desc }}</p>
+                    <div style="display:flex;align-items:center;gap:9px;padding:12px 14px;border-radius:13px;background:var(--bg-2);border:1px dashed var(--line);">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z"/><path d="M6 11a6 6 0 0 0 12 0M12 17v3"/></svg>
+                      <span style="font:500 13.5px 'Newsreader',serif;font-style:italic;color:var(--text);">{{ dv.phrase }}</span>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ GUIDE ============ -->
+      <sc-if value="{{ isGuide }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Guide" style="padding:84px 18px 40px;">
+          <div data-reveal style="font:600 12px 'Hanken Grotesk';letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">Make yourself at home</div>
+          <h2 data-reveal style="margin:0 0 22px;font-family:'Newsreader',serif;font-weight:400;font-size:34px;letter-spacing:-0.01em;line-height:1.05;">House guide</h2>
+
+          <!-- WIFI -->
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px;margin-bottom:14px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+              <div style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12a10.5 10.5 0 0 1 14 0M8 15.2a6 6 0 0 1 8 0"/><circle cx="12" cy="19" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+              <div style="font:600 15px 'Hanken Grotesk';">Wi-Fi</div>
+            </div>
+            <button onClick="{{ copyWifiName }}" style="width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;border-radius:13px;background:var(--bg-2);border:1px solid var(--line);cursor:pointer;color:var(--text);margin-bottom:9px;" style-active="transform:scale(.99)">
+              <div><div style="font:500 11px 'Hanken Grotesk';color:var(--text-3);">Network</div><div style="font:600 15px 'Hanken Grotesk';margin-top:2px;">OrchardPark_5G</div></div>
+              <span style="display:flex;align-items:center;gap:6px;font:600 12px 'Hanken Grotesk';color:var(--accent);">
+                <sc-if value="{{ copiedName }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5 11-11"/></svg>Copied</sc-if>
+                <sc-if value="{{ uncopiedName }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>Copy</sc-if>
+              </span>
+            </button>
+            <button onClick="{{ copyWifiPass }}" style="width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;border-radius:13px;background:var(--bg-2);border:1px solid var(--line);cursor:pointer;color:var(--text);" style-active="transform:scale(.99)">
+              <div><div style="font:500 11px 'Hanken Grotesk';color:var(--text-3);">Password</div><div style="font:600 15px 'Hanken Grotesk';margin-top:2px;letter-spacing:.02em;">Stay@Orchard2026</div></div>
+              <span style="display:flex;align-items:center;gap:6px;font:600 12px 'Hanken Grotesk';color:var(--accent);">
+                <sc-if value="{{ copiedPass }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5 11-11"/></svg>Copied</sc-if>
+                <sc-if value="{{ uncopiedPass }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>Copy</sc-if>
+              </span>
+            </button>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line-2);">
+              <image-slot id="wifi-qr" style="width:74px;height:74px;flex-shrink:0;" shape="rounded" radius="14" placeholder="QR"></image-slot>
+              <div style="font:500 13px 'Hanken Grotesk';color:var(--text-2);line-height:1.5;">Scan the code with your camera to join instantly — no typing.</div>
+            </div>
+          </div>
+
+          <!-- HOUSE RULES -->
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px;margin-bottom:14px;">
+            <div style="font:600 12px 'Hanken Grotesk';letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px;">House rules</div>
+            <div style="display:flex;flex-direction:column;gap:11px;">
+              <sc-for list="{{ rules }}" as="r" hint-placeholder-count="6">
+                <div style="display:flex;align-items:flex-start;gap:11px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-top:1px;flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>
+                  <span style="font:500 14px 'Hanken Grotesk';color:var(--text);line-height:1.45;">{{ r }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:16px;padding:13px 15px;border-radius:13px;background:rgba(176,73,47,0.08);border:1px solid rgba(176,73,47,0.2);display:flex;align-items:center;gap:10px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+              <span style="font:500 13.5px 'Hanken Grotesk';color:var(--text);">Smoking penalty — <strong>USD 300</strong>. This is an Airbnb home, not a hotel.</span>
+            </div>
+          </div>
+
+          <!-- CCTV -->
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px;margin-bottom:14px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5 16 5l1 3.6L4 12Z"/><path d="m15.5 7 3.8-1.3a1 1 0 0 1 1.3.7l.6 2.2a1 1 0 0 1-.7 1.2L17 11"/><path d="M5 12v4a2 2 0 0 0 2 2h1M8 21v-3"/></svg><div style="font:600 15px 'Hanken Grotesk';">Privacy &amp; cameras</div></div>
+            <div style="display:flex;align-items:flex-start;gap:11px;padding:13px 0;border-bottom:1px solid var(--line-2);">
+              <span style="margin-top:2px;width:8px;height:8px;border-radius:50%;background:#6FD08A;flex-shrink:0;"></span>
+              <div><div style="font:600 14px 'Hanken Grotesk';">Living room camera</div><div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);margin-top:2px;line-height:1.5;">You may switch it OFF during your stay. Please switch it back ON before checkout.</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:11px;padding:13px 0 0;">
+              <span style="margin-top:2px;width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>
+              <div><div style="font:600 14px 'Hanken Grotesk';">Garage camera</div><div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);margin-top:2px;line-height:1.5;">Always on, for security purposes only.</div></div>
+            </div>
+          </div>
+
+          <!-- FACILITIES -->
+          <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px;margin-bottom:14px;">
+            <div style="font:600 12px 'Hanken Grotesk';letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px;">Facilities · walking distance</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+              <image-slot id="fac-pool" style="width:100%;aspect-ratio:1;" shape="rounded" radius="14" placeholder="Pool"></image-slot>
+              <image-slot id="fac-gym" style="width:100%;aspect-ratio:1;" shape="rounded" radius="14" placeholder="Gym"></image-slot>
+              <image-slot id="fac-club" style="width:100%;aspect-ratio:1;" shape="rounded" radius="14" placeholder="Clubhouse"></image-slot>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <span style="padding:7px 13px;border-radius:100px;background:var(--bg-2);font:600 12.5px 'Hanken Grotesk';">Swimming pool</span>
+              <span style="padding:7px 13px;border-radius:100px;background:var(--bg-2);font:600 12.5px 'Hanken Grotesk';">Gym</span>
+              <span style="padding:7px 13px;border-radius:100px;background:var(--bg-2);font:600 12.5px 'Hanken Grotesk';">Clubhouse</span>
+            </div>
+            <div style="margin-top:14px;font:500 13px 'Hanken Grotesk';color:var(--text-2);">Day-use fee approximately <strong style="color:var(--text);">USD 5 / person</strong>, payable at the clubhouse.</div>
+          </div>
+
+          <!-- BEDS + BATH grid -->
+          <div data-reveal style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px;">
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px;">
+              <div style="font:600 12px 'Hanken Grotesk';letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px;">Where you'll sleep</div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <sc-for list="{{ beds }}" as="b" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:13px;">
+                    <div style="width:38px;height:38px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10M3 14h18M7 10h4"/><path d="M3 18v2M21 18v2"/></svg></div>
+                    <div style="flex:1;"><div style="font:600 14.5px 'Hanken Grotesk';">{{ b.room }}</div><div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);">{{ b.detail }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px;">
+              <div style="font:600 12px 'Hanken Grotesk';letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px;">Bathrooms &amp; supplies</div>
+              <div style="font:500 13.5px 'Hanken Grotesk';color:var(--text-2);line-height:1.6;"><strong style="color:var(--text);">Master bathroom</strong> — hot water, luxury bathtub &amp; premium toiletries.<br><strong style="color:var(--text);">Common bathroom</strong> — no water heater.</div>
+              <div style="margin-top:14px;display:flex;gap:8px;">
+                <div style="flex:1;text-align:center;padding:12px;border-radius:14px;background:var(--bg-2);"><div style="font:600 18px 'Hanken Grotesk';">4</div><div style="font:500 11px 'Hanken Grotesk';color:var(--text-3);margin-top:2px;">towels</div></div>
+                <div style="flex:1;text-align:center;padding:12px;border-radius:14px;background:var(--bg-2);"><div style="font:600 18px 'Hanken Grotesk';">4</div><div style="font:500 11px 'Hanken Grotesk';color:var(--text-3);margin-top:2px;">toiletries</div></div>
+                <div style="flex:1;text-align:center;padding:12px;border-radius:14px;background:var(--bg-2);"><div style="font:600 18px 'Hanken Grotesk';">4</div><div style="font:500 11px 'Hanken Grotesk';color:var(--text-3);margin-top:2px;">guests</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHECKOUT -->
+          <div data-reveal style="background:linear-gradient(160deg,var(--card) 0%,var(--card-2) 100%);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg><div style="font:600 15px 'Hanken Grotesk';">Before you check out</div></div>
+            <div style="display:flex;flex-direction:column;gap:0;">
+              <sc-for list="{{ checkout }}" as="c" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:13px;padding:11px 0;border-bottom:1px solid var(--line-2);">
+                  <div style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);display:flex;align-items:center;justify-content:center;font:600 12px 'Hanken Grotesk';flex-shrink:0;">{{ c.n }}</div>
+                  <span style="font:500 14px 'Hanken Grotesk';color:var(--text);">{{ c.t }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:16px;text-align:center;font-family:'Newsreader',serif;font-style:italic;font-size:17px;color:var(--accent);">Safe journey, Marcus.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ HELP ============ -->
+      <sc-if value="{{ isHelp }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Help" style="padding:84px 18px 40px;">
+          <div data-reveal style="font:600 12px 'Hanken Grotesk';letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;">We're one tap away</div>
+          <h2 data-reveal style="margin:0 0 22px;font-family:'Newsreader',serif;font-weight:400;font-size:34px;letter-spacing:-0.01em;line-height:1.05;">Help &amp;<br>support</h2>
+
+          <div data-reveal style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
+            <button onClick="{{ messageHost }}" style="text-align:left;display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;box-shadow:var(--shadow);" style-active="transform:scale(.985)" style-hover="border-color:var(--accent-2)">
+              <div style="width:44px;height:44px;border-radius:13px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 20.5l1.6-5A8.5 8.5 0 1 1 21 11.5Z"/></svg></div>
+              <div style="flex:1;"><div style="font:600 15px 'Hanken Grotesk';">Message host on Airbnb</div><div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);">Anya · usually replies within an hour</div></div>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button onClick="{{ openWhatsapp }}" style="text-align:left;display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;box-shadow:var(--shadow);" style-active="transform:scale(.985)" style-hover="border-color:var(--accent-2)">
+              <div style="width:44px;height:44px;border-radius:13px;background:rgba(37,211,102,0.12);color:#1FA855;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.7-4.4A8.5 8.5 0 1 1 8 19.4L3 21Z"/><path d="M8.5 9.2c.2 2.3 3.9 6 6.2 6.2.7.1 1.3-.5 1.6-1.1.1-.3 0-.6-.3-.8l-1.7-.9c-.3-.1-.6-.1-.8.2l-.4.5c-1-.4-2-1.4-2.4-2.4l.5-.4c.3-.2.3-.5.2-.8l-.9-1.7c-.2-.3-.5-.4-.8-.3-.6.3-1.2.9-1.1 1.6Z"/></svg></div>
+              <div style="flex:1;"><div style="font:600 15px 'Hanken Grotesk';">WhatsApp the host</div><div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);">For quick questions during your stay</div></div>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <button onClick="{{ callSecurity }}" style="text-align:left;display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;box-shadow:var(--shadow);" style-active="transform:scale(.985)" style-hover="border-color:var(--accent-2)">
+              <div style="width:44px;height:44px;border-radius:13px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3l1.5 5-2 1.5a11 11 0 0 0 5 5l1.5-2 5 1.5v3a2 2 0 0 1-2.2 2A16 16 0 0 1 3 6.2 2 2 0 0 1 5 4Z"/></svg></div>
+              <div style="flex:1;"><div style="font:600 15px 'Hanken Grotesk';">Call estate security</div><div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);">Orchard Park guard post · 24 hours</div></div>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+
+          <button data-reveal onClick="{{ callEmergency }}" style="width:100%;text-align:left;display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;border:1px solid rgba(176,73,47,0.28);background:rgba(176,73,47,0.06);color:var(--text);cursor:pointer;margin-bottom:24px;" style-active="transform:scale(.985)">
+            <div style="width:44px;height:44px;border-radius:13px;background:rgba(176,73,47,0.14);color:var(--danger);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></div>
+            <div style="flex:1;"><div style="font:600 15px 'Hanken Grotesk';color:var(--danger);">Emergency · 112</div><div style="font:500 12.5px 'Hanken Grotesk';color:var(--text-2);">Police, fire &amp; ambulance (Indonesia)</div></div>
+          </button>
+
+          <!-- FAQ -->
+          <div data-reveal style="font-family:'Newsreader',serif;font-size:21px;letter-spacing:-0.01em;margin:0 2px 13px;">Frequent questions</div>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="6">
+              <div data-reveal style="background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);">
+                <button onClick="{{ f.toggle }}" style="width:100%;text-align:left;display:flex;align-items:center;gap:12px;padding:15px 16px;border:none;background:transparent;color:var(--text);cursor:pointer;" style-active="background:var(--card-2)">
+                  <span style="flex:1;font:600 14px 'Hanken Grotesk';letter-spacing:-0.005em;">{{ f.q }}</span>
+                  <span style="color:var(--text-3);transform:rotate({{ f.rot }});transition:transform .3s ease;flex-shrink:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+                </button>
+                <sc-if value="{{ f.isOpen }}" hint-placeholder-val="{{ false }}">
+                  <p style="margin:0;padding:0 16px 16px;font:500 13.5px 'Hanken Grotesk';color:var(--text-2);line-height:1.6;">{{ f.a }}</p>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="text-align:center;margin-top:28px;font:500 12px 'Hanken Grotesk';color:var(--text-3);line-height:1.6;">Orchard Park Vitis 3 No.3<br>Thank you for staying with us.</div>
+        </div>
+      </sc-if>
+
+    </div>
+
+    <!-- BOTTOM TAB BAR -->
+    <nav style="position:relative;z-index:30;display:flex;align-items:stretch;gap:0;padding:9px 8px calc(9px + env(safe-area-inset-bottom));background:var(--glass);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-top:1px solid var(--line);">
+      <button onClick="{{ goHome }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 2px;border:none;background:transparent;cursor:pointer;color:{{ homeColor }};" style-active="transform:scale(.9)">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9.5a.5.5 0 0 0 .5.5H10v-5h4v5h3.5a.5.5 0 0 0 .5-.5V10"/></svg>
+        <span style="font:600 10.5px 'Hanken Grotesk';">Stay</span>
+      </button>
+      <button onClick="{{ goArrival }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 2px;border:none;background:transparent;cursor:pointer;color:{{ arrivalColor }};" style-active="transform:scale(.9)">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.2-7-10.5A7 7 0 0 1 19 10.5C19 15.8 12 21 12 21Z"/><circle cx="12" cy="10.3" r="2.4"/></svg>
+        <span style="font:600 10.5px 'Hanken Grotesk';">Arrival</span>
+      </button>
+      <button onClick="{{ goSmart }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 2px;border:none;background:transparent;cursor:pointer;color:{{ smartColor }};" style-active="transform:scale(.9)">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><rect x="9" y="9" width="6" height="6" rx="1.4"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>
+        <span style="font:600 10.5px 'Hanken Grotesk';">Smart</span>
+      </button>
+      <button onClick="{{ goGuide }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 2px;border:none;background:transparent;cursor:pointer;color:{{ guideColor }};" style-active="transform:scale(.9)">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6.5A1.5 1.5 0 0 1 5 19.5Z"/><path d="M5 17.5A1.5 1.5 0 0 1 6.5 16H19"/></svg>
+        <span style="font:600 10.5px 'Hanken Grotesk';">Guide</span>
+      </button>
+      <button onClick="{{ goHelp }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 2px;border:none;background:transparent;cursor:pointer;color:{{ helpColor }};" style-active="transform:scale(.9)">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a2.8 2.8 0 0 1 5.4 1c0 1.8-2.6 2.2-2.6 4M12 17h.01"/></svg>
+        <span style="font:600 10.5px 'Hanken Grotesk';">Help</span>
+      </button>
+    </nav>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:468,&quot;height&quot;:940}}">
+class Component extends DCLogic {
+  state = { tab: 'home', theme: null, pin: false, dev: null, faq: null, copied: null, topbar: false };
+
+  componentDidMount() {
+    if (this.scrollEl) this.scrollEl.addEventListener('scroll', this.onScroll, { passive: true });
+    this.checkReveals();
+    requestAnimationFrame(() => this.checkReveals());
+  }
+  componentDidUpdate() { this.checkReveals(); }
+  componentWillUnmount() {
+    if (this.scrollEl) this.scrollEl.removeEventListener('scroll', this.onScroll);
+  }
+
+  onScroll = () => {
+    const sc = this.scrollEl; if (!sc) return;
+    const y = sc.scrollTop;
+    if (this.heroImg) this.heroImg.style.transform = 'translate3d(0,' + Math.min(y * 0.28, 90) + 'px,0) scale(' + (1 + Math.min(y, 500) / 2600) + ')';
+    if (this.heroVeil) this.heroVeil.style.opacity = String(Math.min(0.5 + y / 700, 1));
+    const show = y > 230;
+    if (show !== this.state.topbar) this.setState({ topbar: show });
+    this.checkReveals();
+  };
+
+  checkReveals() {
+    const sc = this.scrollEl; if (!sc) return;
+    const rb = sc.getBoundingClientRect();
+    const trigger = rb.top + rb.height * 0.94;
+    const els = sc.querySelectorAll('[data-reveal]:not([data-shown])');
+    let stagger = 0;
+    els.forEach(el => {
+      if (!el.hasAttribute('data-init')) {
+        el.setAttribute('data-init', '');
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(22px)';
+        el.style.transition = 'opacity .72s cubic-bezier(.22,.61,.36,1), transform .72s cubic-bezier(.22,.61,.36,1)';
+      }
+      const er = el.getBoundingClientRect();
+      if (er.top < trigger) {
+        el.setAttribute('data-shown', '');
+        el.style.transitionDelay = ((stagger++ % 4) * 60) + 'ms';
+        requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'none'; });
+      }
+    });
+  }
+
+  go = (t) => {
+    this.setState({ tab: t, topbar: false }, () => {
+      if (this.scrollEl) this.scrollEl.scrollTop = 0;
+    });
+  };
+
+  toggleTheme = () => {
+    const sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const eff = this.state.theme || (sysDark ? 'dark' : 'light');
+    this.setState({ theme: eff === 'dark' ? 'light' : 'dark' });
+  };
+
+  revealPin = () => this.setState({ pin: true });
+  copy = (text, key) => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    } catch (e) {}
+    this.setState({ copied: key });
+    setTimeout(() => { if (this.state.copied === key) this.setState({ copied: null }); }, 1700);
+  };
+  toggleDev = (id) => this.setState(s => ({ dev: s.dev === id ? null : id }));
+  toggleFaq = (i) => this.setState(s => ({ faq: s.faq === i ? null : i }));
+
+  open = (url) => { try { window.open(url, '_blank'); } catch (e) {} };
+
+  renderVals() {
+    const t = this.state.tab;
+    const sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const eff = this.state.theme || (sysDark ? 'dark' : 'light');
+    const ACTIVE = 'var(--accent)', IDLE = 'var(--text-3)';
+
+    const pinReal = ['4', '7', '2', '9', '1'];
+    const pinDisplay = this.state.pin ? pinReal : ['•', '•', '•', '•', '•'];
+
+    const devData = [
+      { id: 'lights', short: 'LITE', name: 'Smart lighting', sub: 'Every room, voice or app', desc: 'All lights respond to Google Home and the wall switches. Tap a switch once for on/off; press and hold to dim.', phrase: '"Hey Google, turn off the living room lights."' },
+      { id: 'ac', short: 'AC', name: 'Air conditioning', sub: 'Climate in every bedroom', desc: 'Set your ideal temperature by voice or with the remote on each nightstand. We recommend 24°C for comfortable sleep.', phrase: '"Hey Google, set the bedroom AC to 24 degrees."' },
+      { id: 'fan', short: 'FAN', name: 'Ceiling fans', sub: 'Remote controlled', desc: 'Each fan has a remote on the nearby wall mount, or just ask Google to adjust the speed.', phrase: '"Hey Google, turn on the bedroom fan."' },
+      { id: 'tv', short: 'TV', name: 'Samsung 65" Smart TV', sub: 'Netflix included', desc: 'Netflix is already signed in. Press the home button on the remote, or cast from your phone via AirPlay.', phrase: '"Hey Google, play Netflix on the TV."' },
+      { id: 'audio', short: 'BOSE', name: 'Audio & home theatre', sub: 'Klipsch · Bose · AirPlay', desc: 'Stream to the Bose speakers or the Klipsch home theatre over AirPlay. Keep the volume neighbour-friendly after 10 PM.', phrase: '"Hey Google, play relaxing music."' },
+      { id: 'vac', short: 'VAC', name: 'Robot vacuum', sub: 'Cordless, on demand', desc: 'A cordless robot vacuum keeps the villa tidy. Start it anytime — it returns to its dock automatically.', phrase: '"Hey Google, start vacuuming."' }
+    ];
+    const devices = devData.map(d => ({
+      ...d,
+      isOpen: this.state.dev === d.id,
+      rot: this.state.dev === d.id ? '180deg' : '0deg',
+      toggle: () => this.toggleDev(d.id)
+    }));
+
+    const faqData = [
+      { q: 'Can I check in early?', a: 'Check-in is from 2:00 PM. If the villa is ready sooner, we are happy to let you in early — just message us on the day.' },
+      { q: 'Can I smoke inside?', a: 'No smoking anywhere indoors. A USD 300 cleaning penalty applies. You are welcome to smoke in the private garden.' },
+      { q: 'Where is the pool?', a: 'The swimming pool, gym and clubhouse are a short walk within Orchard Park. A day-use fee of about USD 5 per person is payable at the clubhouse.' },
+      { q: 'How do I use Google Home?', a: 'Just say "Hey Google" followed by your request — lights, AC, fans, TV and music all respond. See the Smart Home tab for exact phrases.' },
+      { q: 'Where do I put the rubbish?', a: 'Please bag your trash and dispose of it in the bins outside the front gate. Keep the home clean and tidy during your stay.' },
+      { q: 'The Wi-Fi isn\'t working.', a: 'Reconnect to OrchardPark_5G with the password in the Guide tab. If it persists, unplug the router for 20 seconds, then message us.' },
+      { q: 'The PIN won\'t open the door.', a: 'Enter the 5-digit PIN, then press the lock\'s key icon. If it still fails, message the host and we will let you in remotely.' },
+      { q: 'Is there hot water?', a: 'Yes — the master bathroom has a water heater and luxury bathtub. The common bathroom does not have a heater.' }
+    ];
+    const faqs = faqData.map((f, i) => ({
+      ...f,
+      isOpen: this.state.faq === i,
+      rot: this.state.faq === i ? '180deg' : '0deg',
+      toggle: () => this.toggleFaq(i)
+    }));
+
+    return {
+      themeAttr: this.state.theme || '',
+      isDark: eff === 'dark', isLight: eff !== 'dark',
+      toggleTheme: this.toggleTheme,
+
+      isHome: t === 'home', isArrival: t === 'arrival', isSmart: t === 'smart', isGuide: t === 'guide', isHelp: t === 'help',
+      homeColor: t === 'home' ? ACTIVE : IDLE,
+      arrivalColor: t === 'arrival' ? ACTIVE : IDLE,
+      smartColor: t === 'smart' ? ACTIVE : IDLE,
+      guideColor: t === 'guide' ? ACTIVE : IDLE,
+      helpColor: t === 'help' ? ACTIVE : IDLE,
+
+      goHome: () => this.go('home'), goArrival: () => this.go('arrival'), goSmart: () => this.go('smart'),
+      goGuide: () => this.go('guide'), goHelp: () => this.go('help'),
+      goWifi: () => this.go('guide'),
+
+      topbarOn: this.state.topbar,
+      topbarOpacity: this.state.topbar ? '1' : '0',
+      topbarShift: this.state.topbar ? '0' : '-6px',
+
+      setScroll: (el) => { this.scrollEl = el; },
+      setHeroImg: (el) => { this.heroImg = el; },
+      setHeroVeil: (el) => { this.heroVeil = el; },
+
+      pinDisplay,
+      pinHidden: !this.state.pin, pinShown: this.state.pin,
+      revealPin: this.revealPin,
+
+      copyWifiName: () => this.copy('OrchardPark_5G', 'name'),
+      copyWifiPass: () => this.copy('Stay@Orchard2026', 'pass'),
+      copiedName: this.state.copied === 'name', uncopiedName: this.state.copied !== 'name',
+      copiedPass: this.state.copied === 'pass', uncopiedPass: this.state.copied !== 'pass',
+
+      openMaps: () => this.open('https://g.co/kgs/iFXw64'),
+      messageHost: () => this.open('https://www.airbnb.com/messaging'),
+      openWhatsapp: () => this.open('https://wa.me/6281234567890'),
+      callSecurity: () => this.open('tel:+6277840000'),
+      callEmergency: () => this.open('tel:112'),
+
+      devices,
+      faqs,
+
+      nearby: [
+        { tag: '☕', name: 'Kopi Kenangan', kind: 'Specialty coffee', dist: '4 min' },
+        { tag: '🛒', name: 'Indomaret Belian', kind: 'Convenience store', dist: '3 min' },
+        { tag: '🍜', name: 'Rezeki Seafood', kind: 'Local restaurant', dist: '6 min' },
+        { tag: '🏧', name: 'BCA ATM', kind: 'Cash & banking', dist: '5 min' },
+        { tag: '🏥', name: 'RS Awal Bros', kind: 'Hospital', dist: '9 min' },
+        { tag: '⛴', name: 'Batam Centre Ferry', kind: 'To Singapore', dist: '14 min' },
+        { tag: '🛍', name: 'Mega Mall Batam', kind: 'Shopping', dist: '12 min' }
+      ],
+
+      rules: [
+        'No parties or events',
+        'No smoking indoors',
+        'Dispose of trash outside the gate',
+        'Keep the home clean and tidy',
+        'Respect the neighbours',
+        'Treat the home as your own'
+      ],
+
+      beds: [
+        { room: 'Master bedroom', detail: 'King bed · ensuite bathroom' },
+        { room: 'Bedroom 2', detail: 'Queen bed' },
+        { room: 'Loft', detail: 'Tatami queen bed' }
+      ],
+
+      checkout: [
+        { n: '1', t: 'Turn off all air conditioning' },
+        { n: '2', t: 'Turn off the lights' },
+        { n: '3', t: 'Bag and dispose of trash outside' },
+        { n: '4', t: 'Switch the living room camera back ON' },
+        { n: '5', t: 'Close the door — the smart lock secures itself' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

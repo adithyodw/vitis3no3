@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sans: var(--font-hanken), system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+
+  --color-bg: var(--background);
+  --color-bg-2: var(--background-2);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-text: var(--foreground);
+  --color-text-2: var(--muted-foreground);
+  --color-text-3: var(--subtle-foreground);
+  --color-line: var(--border);
+  --color-line-2: var(--border-subtle);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-glass: var(--glass);
+}
+
+:root {
+  --background: #f3efe8;
+  --background-2: #e9e3d8;
+  --card: #ffffff;
+  --card-2: #fbf8f2;
+  --foreground: #181410;
+  --muted-foreground: #6a6157;
+  --subtle-foreground: #9d9489;
+  --border: rgba(24, 20, 16, 0.09);
+  --border-subtle: rgba(24, 20, 16, 0.05);
+  --accent: #a07a35;
+  --accent-hover: #b89150;
+  --accent-soft: rgba(160, 122, 53, 0.1);
+  --danger: #b0492f;
+  --glass: rgba(247, 244, 238, 0.72);
+  --shadow: 0 6px 28px rgba(48, 36, 18, 0.09);
+  --shadow-lg: 0 18px 50px rgba(48, 36, 18, 0.16);
+}
+
+.dark {
+  --background: #100e0b;
+  --background-2: #17140f;
+  --card: #1b1712;
+  --card-2: #211c16;
+  --foreground: #f4efe5;
+  --muted-foreground: #a79d8e;
+  --subtle-foreground: #6e665a;
+  --border: rgba(244, 239, 229, 0.1);
+  --border-subtle: rgba(244, 239, 229, 0.055);
+  --accent: #cba85e;
+  --accent-hover: #d8bc78;
+  --accent-soft: rgba(203, 168, 94, 0.14);
+  --danger: #e08163;
+  --glass: rgba(20, 17, 13, 0.66);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 22px 60px rgba(0, 0, 0, 0.55);
+}
+
+@layer base {
+  * {
+    @apply border-line;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-bg-2 font-sans text-text antialiased;
+  }
+}
+
+@layer utilities {
+  .shadow-premium {
+    box-shadow: var(--shadow);
+  }
+
+  .shadow-premium-lg {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .glass-bar {
+    background: var(--glass);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes float-cue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateY(7px);
+    opacity: 1;
+  }
+}
+
+.animate-float-cue {
+  animation: float-cue 2.4s ease-in-out infinite;
+}

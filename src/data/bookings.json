@@ -1,0 +1,13 @@
+{
+  "9a82hd92j": {
+    "id": "booking-001",
+    "guestName": "Marcus",
+    "guestCount": 4,
+    "checkIn": "2026-06-27T14:00:00+07:00",
+    "checkOut": "2026-06-30T12:00:00+07:00",
+    "pinCode": "47291",
+    "bookingRef": "HMXQ-7F3K",
+    "wifiSsid": "OrchardPark_5G",
+    "wifiPassword": "Stay@Orchard2026"
+  }
+}

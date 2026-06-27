@@ -1,0 +1,54 @@
+{
+  "houseRules": [
+    "No parties or events",
+    "No smoking indoors",
+    "Dispose of trash outside the gate",
+    "Keep the home clean and tidy",
+    "Respect the neighbours",
+    "Treat the home as your own"
+  ],
+  "faqs": [
+    {
+      "q": "Can I check in early?",
+      "a": "Check-in is from 2:00 PM. If the villa is ready sooner, we are happy to let you in early — just message us on the day."
+    },
+    {
+      "q": "Can I smoke?",
+      "a": "No smoking anywhere indoors. A USD 300 cleaning penalty applies. You are welcome to smoke in the private garden."
+    },
+    {
+      "q": "Where is the pool?",
+      "a": "The swimming pool, gym and clubhouse are a short walk within Orchard Park. A day-use fee of about USD 5 per person is payable at the clubhouse."
+    },
+    {
+      "q": "How do I use Google Home?",
+      "a": "Just say \"Hey Google\" followed by your request — lights, AC, fans, TV and music all respond. See the Smart Home tab for exact phrases."
+    },
+    {
+      "q": "Where is the rubbish bin?",
+      "a": "Please bag your trash and dispose of it in the bins outside the front gate. Keep the home clean and tidy during your stay."
+    },
+    {
+      "q": "WiFi not working?",
+      "a": "Reconnect using the network and password in the Guide tab. If it persists, unplug the router for 20 seconds, then message us."
+    },
+    {
+      "q": "Air conditioning?",
+      "a": "Use the remote on each nightstand or ask Google Home. We recommend 24°C for comfortable sleep in the tropics."
+    },
+    {
+      "q": "PIN not working?",
+      "a": "Enter the 5-digit PIN, then press the lock's key icon. If it still fails, message the host and we will let you in remotely."
+    }
+  ],
+  "nearby": [
+    { "tag": "Coffee", "name": "Kopi Kenangan", "kind": "Specialty coffee", "dist": "4 min" },
+    { "tag": "Store", "name": "Indomaret Belian", "kind": "Convenience store", "dist": "3 min" },
+    { "tag": "Food", "name": "Rezeki Seafood", "kind": "Local restaurant", "dist": "6 min" },
+    { "tag": "ATM", "name": "BCA ATM", "kind": "Cash & banking", "dist": "5 min" },
+    { "tag": "Hospital", "name": "RS Awal Bros", "kind": "Hospital", "dist": "9 min" },
+    { "tag": "Ferry", "name": "Batam Centre Ferry", "kind": "To Singapore", "dist": "14 min" },
+    { "tag": "Mall", "name": "Mega Mall Batam", "kind": "Shopping", "dist": "12 min" },
+    { "tag": "Airport", "name": "Hang Nadim Airport", "kind": "Airport", "dist": "20 min" }
+  ]
+}

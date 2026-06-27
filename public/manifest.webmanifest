@@ -1,0 +1,30 @@
+{
+  "name": "Orchard Park Concierge",
+  "short_name": "Orchard Park",
+  "description": "Premium guest check-in for Orchard Park Vitis 3 No.3, Batam",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F3EFE8",
+  "theme_color": "#A07A35",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
